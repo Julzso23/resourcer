@@ -1,6 +1,7 @@
-import { Ref, useCallback, useEffect, useRef, useState } from "react"
+import { Ref, useCallback, useRef, useState } from "react"
 import { AllocationModel } from "../Planner"
 import { DateTime, Interval } from "luxon"
+import { AllocationResizeHandle } from "./AllocationResizeHandle"
 
 export function Allocation({ allocation, interval }: {
   allocation: AllocationModel,
@@ -15,16 +16,18 @@ export function Allocation({ allocation, interval }: {
   const [intervalOverride, setIntervalOverride] = useState<Interval | undefined>(undefined)
   const [leftOffset, setLeftOffset] = useState<number>(0)
 
-  const onMouseDown = useCallback((event: React.MouseEvent) => {
+  const onPointerDown = useCallback((event: React.PointerEvent) => {
     setDragging(true)
     const rowWidth: number = ref.current!.parentElement!.getBoundingClientRect().width
     setLeftOffset(
       event.clientX -
       ref.current!.getBoundingClientRect().x -
       Math.min((rowWidth / interval.length('days')) * (intervalOverride || allocation.interval).start!.diff(interval.start!).as('days'), 0))
+
+    ref.current?.setPointerCapture(event.pointerId)
   }, [setDragging, setLeftOffset, ref, interval, allocation, intervalOverride])
 
-  const onMouseMove = useCallback((event: MouseEvent) => {
+  const onPointerMove = useCallback((event: React.PointerEvent) => {
     if (!dragging) return
     const rowX: number = ref.current!.parentElement!.getBoundingClientRect().x
     const rowWidth: number = ref.current!.parentElement!.getBoundingClientRect().width
@@ -32,25 +35,21 @@ export function Allocation({ allocation, interval }: {
     setIntervalOverride(Interval.after(start, allocation.interval.toDuration()))
   }, [dragging, leftOffset, setIntervalOverride, allocation, interval, ref])
 
-  const onMouseUp = useCallback(() => {
+  const onPointerUp = useCallback((event: React.PointerEvent) => {
     setDragging(false)
+    ref.current?.releasePointerCapture(event.pointerId)
   }, [setDragging, intervalOverride, setIntervalOverride])
-
-  useEffect(() => {
-    document.body.addEventListener('mousemove', onMouseMove)
-    document.body.addEventListener('mouseup', onMouseUp)
-    return () => {
-      document.body.removeEventListener('mousemove', onMouseMove)
-      document.body.removeEventListener('mouseup', onMouseUp)
-    }
-  }, [onMouseMove])
 
   return (
     <div
       ref={ref}
-      className={`absolute border top-1/8 h-3/4 bg-green-950 border-emerald-950 rounded-sm shadow-md box-border select-none ${dragging ? 'shadow-black' : ''}`}
+      className={`absolute border top-1/8 h-3/4 bg-green-950 border-emerald-950 rounded-sm shadow-md box-border select-none flex flex-row cursor-move group ${dragging ? 'shadow-black' : ''}`}
       style={{ left: allocationLeft(intervalOverride || allocation.interval), width: allocationWidth(intervalOverride || allocation.interval) }}
-      onMouseDown={onMouseDown}>
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}>
+      <AllocationResizeHandle />
+      <AllocationResizeHandle right={true} />
     </div>
   )
 }
