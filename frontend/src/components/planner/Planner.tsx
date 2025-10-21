@@ -53,8 +53,8 @@ export function Planner() {
 
   const ref = createRef<HTMLDivElement>()
   useEffect(() => {
-    document.body.addEventListener('wheel', wheelEventHandler, { passive:false })
-    return () => document.body.removeEventListener('wheel', wheelEventHandler)
+    ref.current?.addEventListener('wheel', wheelEventHandler, { passive:false })
+    return () => ref.current?.removeEventListener('wheel', wheelEventHandler)
   }, [wheelEventHandler])
 
   return (
