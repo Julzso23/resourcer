@@ -13,7 +13,7 @@ export function PlannerBody({ interval, zoomLevel, allocations }: {
 
   return (
     <div className="w-full flex flex-col min-h-4 rounded-lg overflow-hidden bg-gray-950 border border-gray-800">
-      { Array(100).fill(0).map((_, index) => <AllocationRow interval={interval} columnWidths={columnWidths} key={index} allocations={allocations} />) }
+      <AllocationRow interval={interval} columnWidths={columnWidths} allocations={allocations} />
     </div>
   )
 }

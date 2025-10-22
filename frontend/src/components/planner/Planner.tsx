@@ -53,9 +53,10 @@ export function Planner() {
 
   const ref = createRef<HTMLDivElement>()
   useEffect(() => {
-    ref.current?.addEventListener('wheel', wheelEventHandler, { passive:false })
-    return () => ref.current?.removeEventListener('wheel', wheelEventHandler)
-  }, [wheelEventHandler])
+    const currentRef = ref.current!
+    currentRef.addEventListener('wheel', wheelEventHandler, { passive:false })
+    return () => currentRef.removeEventListener('wheel', wheelEventHandler)
+  }, [wheelEventHandler, ref])
 
   return (
     <div className="flex flex-col m-4 relative text-white rounded-lg gap-1" ref={ref}>
