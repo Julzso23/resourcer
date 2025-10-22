@@ -16,7 +16,8 @@ export class AllocationModel {
 export function Planner() {
   const [ zoomLevel, setZoomLevel ] = useState<DateTimeUnit>('month')
   const [ startDate, setStartDate ] = useState<DateTime>(DateTime.now().startOf(zoomLevel).minus({ [zoomLevel]: 1 }))
-  const interval: Interval = Interval.after(startDate, { [zoomLevel]: 12 })
+  const [ columnCount, setColumnCount ] = useState<number>(12)
+  const interval: Interval = Interval.after(startDate, { [zoomLevel]: columnCount })
   const allocations: AllocationModel[] = [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))]
 
   const wheelEventHandler = useCallback((event: WheelEvent) => {
@@ -57,6 +58,17 @@ export function Planner() {
     currentRef.addEventListener('wheel', wheelEventHandler, { passive:false })
     return () => currentRef.removeEventListener('wheel', wheelEventHandler)
   }, [wheelEventHandler, ref])
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        setColumnCount(Math.floor(entry.contentRect.width / 160))
+      }
+    })
+    resizeObserver.observe(ref.current!)
+
+    return () => resizeObserver.disconnect()
+  }, [ref, setColumnCount])
 
   return (
     <div className="flex flex-col m-4 relative text-white rounded-lg gap-1" ref={ref}>
