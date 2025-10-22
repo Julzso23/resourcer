@@ -71,7 +71,7 @@ export function Planner() {
   }, [ref, setColumnCount])
 
   return (
-    <div className="flex flex-col m-4 relative text-white rounded-lg gap-1" ref={ref}>
+    <div className="flex flex-col m-4 relative text-white rounded-lg gap-1 touch-manipulation" ref={ref}>
       <PlannerHead interval={interval} zoomLevel={zoomLevel} />
       <PlannerBody interval={interval} zoomLevel={zoomLevel} allocations={allocations} />
     </div>
