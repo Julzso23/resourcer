@@ -13,12 +13,30 @@ export class AllocationModel {
   }
 }
 
+export class ProjectAllocationsModel {
+  name: string
+  allocationRows: AllocationModel[][] = [[]]
+
+  constructor(name: string, allocationRows: AllocationModel[][]) {
+    this.name = name
+    this.allocationRows = allocationRows
+  }
+}
+
 export function Planner() {
   const [ zoomLevel, setZoomLevel ] = useState<DateTimeUnit>('month')
   const [ startDate, setStartDate ] = useState<DateTime>(DateTime.now().startOf(zoomLevel).minus({ [zoomLevel]: 1 }))
   const [ columnCount, setColumnCount ] = useState<number>(12)
   const interval: Interval = Interval.after(startDate, { [zoomLevel]: columnCount })
-  const allocations: AllocationModel[] = [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))]
+  const projectAllocations: ProjectAllocationsModel[] = [
+    new ProjectAllocationsModel('Test Project', [
+      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
+      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
+    ]),
+    new ProjectAllocationsModel('Test Project', [
+      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
+    ]),
+  ]
 
   const wheelEventHandler = useCallback((event: WheelEvent) => {
     if (event.ctrlKey) {
@@ -73,7 +91,7 @@ export function Planner() {
   return (
     <div className="flex flex-col m-4 relative text-white rounded-lg gap-1 touch-manipulation" ref={ref}>
       <PlannerHead interval={interval} zoomLevel={zoomLevel} />
-      <PlannerBody interval={interval} zoomLevel={zoomLevel} allocations={allocations} />
+      <PlannerBody interval={interval} zoomLevel={zoomLevel} projectAllocations={projectAllocations} />
     </div>
   )
 }
