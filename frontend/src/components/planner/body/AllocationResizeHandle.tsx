@@ -8,7 +8,7 @@ export function AllocationResizeHandle({ right = false, onPointerDown, onPointer
 }) {
   return (
     <div
-      className={`h-full w-fit p-1 cursor-ew-resize opacity-0 group-hover:opacity-50 active:opacity-90 ${right ? 'ml-auto' : ''}`}
+      className={`h-full w-fit p-1 cursor-ew-resize opacity-0 group-hover:opacity-50 hover:opacity-70 active:opacity-90 ${right ? 'ml-auto' : ''}`}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}>
