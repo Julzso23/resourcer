@@ -77,6 +77,8 @@ export function Planner() {
     }
   }, [zoomLevel, setZoomLevel, startDate, setStartDate])
 
+  const scrollButtonHandler = useCallback((dateUnit: DateTimeUnit, amount: number) => setStartDate(startDate.plus({ [dateUnit]: amount })), [setStartDate, startDate])
+
   const ref = createRef<HTMLDivElement>()
   useEffect(() => {
     const currentRef = ref.current!
@@ -97,7 +99,7 @@ export function Planner() {
 
   return (
     <div className="flex flex-col m-4 relative text-white rounded-lg gap-1 touch-manipulation" ref={ref}>
-      <PlannerHead interval={interval} zoomLevel={zoomLevel} />
+      <PlannerHead interval={interval} zoomLevel={zoomLevel} onScroll={scrollButtonHandler} />
       <PlannerBody interval={interval} zoomLevel={zoomLevel} projectAllocations={projectAllocations} />
     </div>
   )

@@ -1,9 +1,11 @@
 import { DateTime, DateTimeUnit } from 'luxon'
 import { DateRowCell } from './DateRowCell'
+import { DateRowScrollButton } from './DateRowScrollButton'
 
-export function DateRow({ dateUnit, dateCells }: {
+export function DateRow({ dateUnit, dateCells, onScroll }: {
   dateUnit: DateTimeUnit,
   dateCells: [number, number][],
+  onScroll: (dateUnit: DateTimeUnit, amount: number) => void,
 }) {
   const getDateString = (millis: number) => {
     const date: DateTime = DateTime.fromMillis(millis)
@@ -16,8 +18,10 @@ export function DateRow({ dateUnit, dateCells }: {
   }
 
   return (
-    <div className="flex flex-row border-b last:border-none border-gray-800 first:rounded-t-lg overflow-hidden">
+    <div className="flex flex-row border-b last:border-none border-gray-800 first:rounded-t-lg overflow-hidden relative">
+      <DateRowScrollButton onClick={() => onScroll(dateUnit, -1)} />
       { dateCells.map(date => <DateRowCell widthPercent={date[1] * 100} key={date[0]}>{ getDateString(date[0]) }</DateRowCell>) }
+      <DateRowScrollButton right onClick={() => onScroll(dateUnit, 1)} />
     </div>
   )
 }
