@@ -2,6 +2,7 @@ import { createRef, useCallback, useEffect, useState } from "react";
 import { PlannerBody } from "./body/PlannerBody";
 import { PlannerHead } from "./head/PlannerHead";
 import { DateTime, DateTimeUnit, Interval } from "luxon";
+import { SettingsMenu } from "./sidebar/SettingsMenu";
 
 export class AllocationModel {
   name: string
@@ -27,6 +28,11 @@ export class ProjectAllocationsModel {
   }
 }
 
+enum CurrentMenu {
+  None,
+  Settings,
+}
+
 export function Planner() {
   const [ zoomLevel, setZoomLevel ] = useState<DateTimeUnit>('month')
   const [ startDate, setStartDate ] = useState<DateTime>(DateTime.now().startOf(zoomLevel).minus({ [zoomLevel]: 1 }))
@@ -44,6 +50,8 @@ export function Planner() {
       [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }), 100)],
     ], 'https://placehold.co/16x16'),
   ]
+
+  const [ currentMenu, setCurrentMenu ] = useState<CurrentMenu>(CurrentMenu.None)
 
   const wheelEventHandler = useCallback((event: WheelEvent) => {
     if (event.ctrlKey) {
@@ -114,10 +122,30 @@ export function Planner() {
     return () => resizeObserver.disconnect()
   }, [ref, setColumnCount])
 
+  const [ sidebarClosing, setSidebarClosing ] = useState(false)
+
+  const toggleSettings = useCallback(() => {
+    if (currentMenu === CurrentMenu.Settings) {
+      setSidebarClosing(true)
+    } else if (currentMenu === CurrentMenu.None) {
+      setCurrentMenu(CurrentMenu.Settings)
+    }
+  }, [setCurrentMenu, currentMenu, setSidebarClosing])
+
+  const closeMenu = useCallback(() => {
+    setCurrentMenu(CurrentMenu.None)
+    setSidebarClosing(false)
+  }, [setCurrentMenu, setSidebarClosing])
+
   return (
-    <div className="flex flex-col m-4 relative text-white rounded-lg gap-1 touch-manipulation" ref={ref}>
-      <PlannerHead interval={interval} zoomLevel={zoomLevel} onScroll={scrollButtonHandler} onSetStartDate={setStartDateHandler} />
-      <PlannerBody interval={interval} zoomLevel={zoomLevel} projectAllocations={projectAllocations} />
+    <div className="m-4 relative text-white rounded-lg gap-1 touch-manipulation" ref={ref}>
+      <div className="flex flex-row gap-2 flex-wrap">
+        { currentMenu === CurrentMenu.Settings && <SettingsMenu onClose={closeMenu} closing={sidebarClosing} /> }
+        <div className="flex flex-col flex-auto gap-1">
+          <PlannerHead interval={interval} zoomLevel={zoomLevel} onScroll={scrollButtonHandler} onSetStartDate={setStartDateHandler} onOpenSettings={toggleSettings} />
+          <PlannerBody interval={interval} zoomLevel={zoomLevel} projectAllocations={projectAllocations} />
+        </div>
+      </div>
     </div>
   )
 }

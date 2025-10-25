@@ -3,3 +3,33 @@
 body {
   background-color: var(--color-gray-900);
 }
+
+@theme {
+  --animate-slide-open: slide-open 0.25s;
+  --animate-slide-closed: slide-closed 0.25s;
+
+  @keyframes slide-open {
+    0% {
+      opacity: 0;
+      transform-origin: center left;
+      transform: scaleX(0);
+    }
+    100% {
+      opacity: 1;
+      transform-origin: center left;
+      transform: scaleX(1);
+    }
+  }
+  @keyframes slide-closed {
+    0% {
+      transform-origin: center left;
+      transform: scaleX(1);
+      opacity: 1;
+    }
+    100% {
+      transform-origin: center left;
+      transform: scaleX(0);
+      opacity: 0;
+    }
+  }
+}

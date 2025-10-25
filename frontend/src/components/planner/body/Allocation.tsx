@@ -88,7 +88,7 @@ export function Allocation({ allocation, interval }: {
   return (
     <div
       ref={ref}
-      className={`absolute border top-1/8 h-3/4 bg-green-950 border-emerald-950 shadow-md box-border select-none flex flex-row cursor-move group touch-none ${dragState !== AllocationState.Idle ? 'shadow-black' : ''} ${borderRadiusClasses}`}
+      className={`absolute border top-1/8 h-3/4 bg-green-950 border-emerald-950 shadow box-border select-none flex flex-row cursor-move group touch-none ${dragState !== AllocationState.Idle ? 'shadow-black' : ''} ${borderRadiusClasses}`}
       style={{ left: allocationLeft(intervalOverride || allocation.interval), width: allocationWidth(intervalOverride || allocation.interval) }}
       onPointerDown={event => onPointerDown(event, AllocationState.Move)}
       onPointerMove={onPointerMove}
