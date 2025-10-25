@@ -13,7 +13,7 @@ export function PlannerHead({ interval, zoomLevel }: {
 
   return (
     <div className="flex flex-row gap-1">
-      <div className="w-40 flex flex-row gap-1 justify-evenly items-start flex-wrap">
+      <div className="xl:w-80 lg:w-60 w-40 flex flex-row gap-1 items-start flex-wrap p-2">
         <Button><FontAwesomeIcon icon={faGear} /></Button>
         <Button><FontAwesomeIcon icon={faFilter} /></Button>
       </div>

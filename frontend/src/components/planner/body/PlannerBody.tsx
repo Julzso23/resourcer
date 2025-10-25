@@ -13,7 +13,7 @@ export function PlannerBody({ interval, zoomLevel, projectAllocations }: {
 
   return (
     <div className="w-full flex flex-col gap-1 min-h-4 overflow-hidden">
-      { projectAllocations.map(project => <AllocationRowContainer name={project.name} interval={interval} columnWidths={columnWidths} allocationRows={project.allocationRows} />) }
+      { projectAllocations.map((project, index) => <AllocationRowContainer key={index} project={project} interval={interval} columnWidths={columnWidths} />) }
     </div>
   )
 }

@@ -1,18 +1,20 @@
 import { Interval } from "luxon";
 import { AllocationRow } from "./AllocationRow";
-import { AllocationModel } from "../Planner";
+import { ProjectAllocationsModel } from "../Planner";
 
-export function AllocationRowContainer({ name, interval, columnWidths, allocationRows }: {
-  name: string,
+export function AllocationRowContainer({ interval, columnWidths, project }: {
   interval: Interval,
   columnWidths: number[],
-  allocationRows: AllocationModel[][],
+  project: ProjectAllocationsModel,
 }) {
   return (
     <div className="flex flex-row gap-1 items-stretch">
-      <div className="w-40 p-2 bg-gray-950 rounded-lg border border-gray-800 flex flex-row items-center shadow-md">{ name }</div>
+      <div className="xl:w-80 lg:w-60 w-40 px-4 py-2 bg-gray-950 rounded-lg border border-gray-800 flex flex-row items-center gap-2 shadow-md">
+        { project.image ? <img src={project.image} className="w-6 aspect-square rounded-sm" /> : undefined }
+        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis" title={project.name}>{ project.name }</span>
+      </div>
       <div className="flex flex-col flex-auto rounded-lg shadow-md">
-        { allocationRows.map(allocations => <AllocationRow interval={interval} columnWidths={columnWidths} allocations={allocations} />) }
+        { project.allocationRows.map((allocations, index) => <AllocationRow key={index} interval={interval} columnWidths={columnWidths} allocations={allocations} />) }
       </div>
     </div>
   )

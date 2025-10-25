@@ -15,11 +15,13 @@ export class AllocationModel {
 
 export class ProjectAllocationsModel {
   name: string
+  image?: string
   allocationRows: AllocationModel[][] = [[]]
 
-  constructor(name: string, allocationRows: AllocationModel[][]) {
+  constructor(name: string, allocationRows: AllocationModel[][], image?: string) {
     this.name = name
     this.allocationRows = allocationRows
+    this.image = image
   }
 }
 
@@ -32,10 +34,13 @@ export function Planner() {
     new ProjectAllocationsModel('Test Project', [
       [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
       [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
-    ]),
-    new ProjectAllocationsModel('Test Project', [
+    ], 'https://placehold.co/16x16'),
+    new ProjectAllocationsModel('This is a test project', [
       [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
     ]),
+    new ProjectAllocationsModel('Project superlongname', [
+      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
+    ], 'https://placehold.co/16x16'),
   ]
 
   const wheelEventHandler = useCallback((event: WheelEvent) => {
