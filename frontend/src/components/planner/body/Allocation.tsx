@@ -95,6 +95,7 @@ export function Allocation({ allocation, interval }: {
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}>
       { isOverflowingLeft ? undefined : <AllocationResizeHandle onPointerDown={event => onPointerDown(event, AllocationState.ResizeLeft)} onPointerMove={onPointerMove} onPointerUp={onPointerUp} /> }
+      <span className="px-2 overflow-hidden text-ellipsis">{ allocation.name } - { allocation.percent }%</span>
       { isOverflowingRight ? undefined : <AllocationResizeHandle onPointerDown={event => onPointerDown(event, AllocationState.ResizeRight)} onPointerMove={onPointerMove} onPointerUp={onPointerUp} right={true} /> }
     </div>
   )

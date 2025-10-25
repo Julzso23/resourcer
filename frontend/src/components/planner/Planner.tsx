@@ -6,10 +6,12 @@ import { DateTime, DateTimeUnit, Interval } from "luxon";
 export class AllocationModel {
   name: string
   interval: Interval
+  percent: number
 
-  constructor(name: string, interval: Interval) {
+  constructor(name: string, interval: Interval, percent: number) {
     this.name = name
     this.interval = interval
+    this.percent = percent
   }
 }
 
@@ -32,14 +34,14 @@ export function Planner() {
   const interval: Interval = Interval.after(startDate, { [zoomLevel]: columnCount })
   const projectAllocations: ProjectAllocationsModel[] = [
     new ProjectAllocationsModel('Test Project', [
-      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
-      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
+      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }), 100)],
+      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }), 100)],
     ], 'https://placehold.co/16x16'),
     new ProjectAllocationsModel('This is a test project', [
-      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
+      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }), 100)],
     ]),
     new ProjectAllocationsModel('Project superlongname', [
-      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }))],
+      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }), 100)],
     ], 'https://placehold.co/16x16'),
   ]
 
