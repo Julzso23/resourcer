@@ -32,7 +32,7 @@ import { JwtAuthGuard } from './jwt-auth.guard';
       useClass: JwtAuthGuard,
     },
     LocalStrategy,
-    JwtStrategy
+    JwtStrategy,
   ],
   controllers: [AuthController],
   exports: [AuthService],

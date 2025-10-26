@@ -5,11 +5,14 @@ import { DateTime, DateTimeUnit, Interval } from "luxon";
 import { SettingsMenu } from "./sidebar/SettingsMenu";
 
 export class AllocationModel {
+  static nextId: number = 0
+  id: number
   name: string
   interval: Interval
   percent: number
 
   constructor(name: string, interval: Interval, percent: number) {
+    this.id = AllocationModel.nextId++
     this.name = name
     this.interval = interval
     this.percent = percent
@@ -17,11 +20,14 @@ export class AllocationModel {
 }
 
 export class ProjectAllocationsModel {
+  static nextId: number = 0
+  id: number
   name: string
   image?: string
   allocationRows: AllocationModel[][] = [[]]
 
   constructor(name: string, allocationRows: AllocationModel[][], image?: string) {
+    this.id = ProjectAllocationsModel.nextId++
     this.name = name
     this.allocationRows = allocationRows
     this.image = image

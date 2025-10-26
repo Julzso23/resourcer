@@ -14,7 +14,7 @@ export function PlannerBody({ interval, zoomLevel, projectAllocations }: {
 
   return (
     <div className="w-full flex flex-col gap-1 min-h-4 overflow-hidden relative">
-      { projectAllocations.map((project, index) => <AllocationRowContainer key={index} project={project} interval={interval} columnWidths={columnWidths} />) }
+      { projectAllocations.map(project => <AllocationRowContainer key={project.id} project={project} interval={interval} columnWidths={columnWidths} />) }
       <div className="absolute top-0 right-0 bottom-0 left-0 xl:ml-81 lg:ml-61 ml-41 box-border pointer-events-none">
         <DateMarkerLine date={DateTime.now()} interval={interval} />
       </div>

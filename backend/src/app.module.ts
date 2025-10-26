@@ -5,6 +5,10 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AllocationsModule } from './allocations/allocations.module';
+import { StaffModule } from './staff/staff.module';
+import { ProjectsModule } from './projects/projects.module';
+import { ProposalsModule } from './proposals/proposals.module';
 
 @Module({
   imports: [
@@ -25,6 +29,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
     UsersModule,
     AuthModule,
+    AllocationsModule,
+    StaffModule,
+    ProjectsModule,
+    ProposalsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

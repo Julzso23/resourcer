@@ -1,13 +1,9 @@
-import {
-  ForbiddenException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { User } from 'entities/user.entity';
 import * as argon2 from 'argon2/argon2.cjs';
-import { CreateUserDto } from 'users/dtos/create-user.dto';
+import { CreateUserDto } from '../../../dtos/create-user.dto';
 import { UsersService } from 'users/users.service';
-import { LoginDto } from './dtos/login.dto';
+import { LoginDto } from '../../../dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -28,10 +24,11 @@ export class AuthService {
   }
 
   async validateLoginDetails(details: LoginDto): Promise<User | null> {
-    const user: User | null = await this.usersService.findByEmail(details.email);
+    const user: User | null = await this.usersService.findByEmail(
+      details.email,
+    );
     if (user == null) throw new ForbiddenException();
-    if (!(await argon2.verify(user.password, details.password)))
-      return null;
+    if (!(await argon2.verify(user.password, details.password))) return null;
     return user;
   }
 
