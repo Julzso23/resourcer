@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { User } from 'entities/user.entity';
 import * as argon2 from 'argon2/argon2.cjs';
-import { CreateUserDto } from '../../../dtos/create-user.dto';
+import { CreateUserDto } from '../../../dtos/createUser.dto';
 import { UsersService } from 'users/users.service';
 import { LoginDto } from '../../../dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';

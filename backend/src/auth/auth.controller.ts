@@ -1,10 +1,16 @@
-import { Body, Controller, HttpCode, Post, Request, Response, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from '../../../dtos/create-user.dto';
+import { CreateUserDto } from '../../../dtos/createUser.dto';
 import { LocalAuthGuard } from './local-auth.guard';
 import { Public } from './public.guard';
 import { AuthenticatedRequest } from './AuthenticatedRequest';
-import { FastifyReply } from 'fastify';
 
 @Controller('auth')
 export class AuthController {
@@ -13,7 +19,7 @@ export class AuthController {
   @Public()
   @Post('register')
   async register(@Body() userDto: CreateUserDto): Promise<{ token: string }> {
-    console.log('register')
+    console.log('register');
     return { token: await this.authService.register(userDto) };
   }
 

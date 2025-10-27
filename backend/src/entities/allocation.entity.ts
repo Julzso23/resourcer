@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Staff } from './staff.entity';
+import { StaffMember } from './staffMember.entity';
 import { User } from './user.entity';
 import { Project } from './project.entity';
 import { Proposal } from './proposal.entity';
@@ -19,8 +19,8 @@ export class Allocation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Staff)
-  staff?: Staff;
+  @ManyToOne(() => StaffMember)
+  staffMember?: StaffMember;
 
   @ManyToOne(() => Project, { nullable: false })
   project: Project;

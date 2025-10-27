@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Allocation } from 'entities/allocation.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateAllocationDto } from '../../../dtos/create-allocation.dto';
+import { CreateAllocationDto } from '../../../dtos/createAllocation.dto';
 
 @Injectable()
 export class AllocationsService {

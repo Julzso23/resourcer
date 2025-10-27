@@ -1,6 +1,7 @@
-import { Controller, Get, NotImplementedException, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { Proposal } from 'entities/proposal.entity';
 import { ProposalsService } from './proposals.service';
+import { ProposalAllocationsDto } from '../../../dtos/proposalAllocations.dto';
 
 @Controller('proposals')
 export class ProposalsController {
@@ -12,8 +13,11 @@ export class ProposalsController {
   }
 
   @Get('master')
-  async getMaster(): Promise<void> {
-    throw new NotImplementedException();
+  async getMaster(
+    @Query('projectView') projectView: boolean,
+    @Query('withProposal') withProposal?: number,
+  ): Promise<ProposalAllocationsDto> {
+    return this.proposalsService.getMaster(projectView, withProposal);
   }
 
   @Get(':id')
