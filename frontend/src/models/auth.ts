@@ -1,5 +1,6 @@
-import { createModel } from "@rematch/core";
+import { createModel, RematchDispatch } from "@rematch/core";
 import { RootModel } from ".";
+import { Api } from "../api";
 
 interface AuthState {
   token: string
@@ -15,22 +16,14 @@ export const auth = createModel<RootModel>()({
       return state
     }
   },
-  effects: (dispatch) => ({
+  effects: (dispatch: RematchDispatch<RootModel>) => ({
     async login(payload: FormData) {
-      fetch('http://127.0.0.1:3000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: payload.get('email'),
-          password: payload.get('password'),
-        })
-      }).then(async response => {
-        const token: string = (await response.json()).token
-        localStorage.setItem('jwt', token)
-        dispatch.auth.setToken(token)
-      })
+      const token: string = (await Api.post<AuthState>('auth/login', {
+          email: payload.get('email')!.toString(),
+          password: payload.get('password')!.toString(),
+        })).token
+      localStorage.setItem('jwt', token)
+      dispatch.auth.setToken(token)
     }
   })
 })

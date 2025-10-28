@@ -3,34 +3,36 @@ import { PlannerBody } from "./body/PlannerBody";
 import { PlannerHead } from "./head/PlannerHead";
 import { DateTime, DateTimeUnit, Interval } from "luxon";
 import { SettingsMenu } from "./sidebar/SettingsMenu";
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch, RootState } from "../../store";
+import { AllocationDto } from "../../../../dtos/allocation.dto";
+import { AllocationCollectionDto } from "../../../../dtos/allocationCollection.dto";
 
 export class AllocationModel {
-  static nextId: number = 0
   id: number
   name: string
   interval: Interval
   percent: number
 
-  constructor(name: string, interval: Interval, percent: number) {
-    this.id = AllocationModel.nextId++
-    this.name = name
-    this.interval = interval
-    this.percent = percent
+  constructor(dto: AllocationDto) {
+    this.id = dto.id
+    this.name = dto.name
+    this.interval = Interval.fromDateTimes(new Date(dto.start), new Date(dto.end))
+    this.percent = dto.percent
   }
 }
 
-export class ProjectAllocationsModel {
-  static nextId: number = 0
+export class AllocationCollectionModel {
   id: number
   name: string
   image?: string
   allocationRows: AllocationModel[][] = [[]]
 
-  constructor(name: string, allocationRows: AllocationModel[][], image?: string) {
-    this.id = ProjectAllocationsModel.nextId++
-    this.name = name
-    this.allocationRows = allocationRows
-    this.image = image
+  constructor(dto: AllocationCollectionDto) {
+    this.id = dto.id
+    this.name = dto.name
+    this.allocationRows = [dto.allocations.map(allocation => new AllocationModel(allocation))]
+    this.image = 'https://placehold.co/16x16'
   }
 }
 
@@ -44,18 +46,13 @@ export function Planner() {
   const [ startDate, setStartDate ] = useState<DateTime>(DateTime.now().startOf(zoomLevel).minus({ [zoomLevel]: 1 }))
   const [ columnCount, setColumnCount ] = useState<number>(12)
   const interval: Interval = Interval.after(startDate, { [zoomLevel]: columnCount })
-  const projectAllocations: ProjectAllocationsModel[] = [
-    new ProjectAllocationsModel('Test Project', [
-      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }), 100)],
-      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }), 100)],
-    ], 'https://placehold.co/16x16'),
-    new ProjectAllocationsModel('This is a test project', [
-      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }), 100)],
-    ]),
-    new ProjectAllocationsModel('Project superlongname', [
-      [new AllocationModel('Test Allocation', Interval.fromDateTimes({ year: 2025, month: 2, day: 1 }, { year: 2025, month: 12, day: 1 }), 100)],
-    ], 'https://placehold.co/16x16'),
-  ]
+
+  const dispatch = useDispatch<Dispatch>()
+  useEffect(() => {
+    dispatch.planner.getAllocationCollections({ projectView: false, withProposal: 1 })
+  }, [dispatch])
+
+  const allocationCollections = useSelector<RootState, AllocationCollectionDto[]>(state => state.planner.allocationCollections)
 
   const [ currentMenu, setCurrentMenu ] = useState<CurrentMenu>(CurrentMenu.None)
 
@@ -149,7 +146,7 @@ export function Planner() {
         { currentMenu === CurrentMenu.Settings && <SettingsMenu onClose={closeMenu} closing={sidebarClosing} /> }
         <div className="flex flex-col flex-auto gap-1">
           <PlannerHead interval={interval} zoomLevel={zoomLevel} onScroll={scrollButtonHandler} onSetStartDate={setStartDateHandler} onOpenSettings={toggleSettings} />
-          <PlannerBody interval={interval} zoomLevel={zoomLevel} projectAllocations={projectAllocations} />
+          <PlannerBody interval={interval} zoomLevel={zoomLevel} projectAllocations={allocationCollections.map(collection => new AllocationCollectionModel(collection))} />
         </div>
       </div>
     </div>
