@@ -5,11 +5,12 @@ import { Proposal } from 'entities/proposal.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StaffMember } from 'entities/staffMember.entity';
 import { Project } from 'entities/project.entity';
-import { Allocation } from 'entities/allocation.entity';
+import { AllocationsModule } from 'allocations/allocations.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Proposal, StaffMember, Project, Allocation]),
+    TypeOrmModule.forFeature([Proposal, StaffMember, Project]),
+    AllocationsModule,
   ],
   providers: [ProposalsService],
   controllers: [ProposalsController],

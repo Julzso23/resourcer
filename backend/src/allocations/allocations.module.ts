@@ -8,5 +8,6 @@ import { Allocation } from 'entities/allocation.entity';
   imports: [TypeOrmModule.forFeature([Allocation])],
   providers: [AllocationsService],
   controllers: [AllocationsController],
+  exports: [AllocationsService],
 })
 export class AllocationsModule {}

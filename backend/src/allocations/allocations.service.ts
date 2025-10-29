@@ -8,24 +8,46 @@ import { CreateAllocationDto } from '../../../dtos/createAllocation.dto';
 export class AllocationsService {
   constructor(
     @InjectRepository(Allocation)
-    private allocationssRepository: Repository<Allocation>,
+    private allocationsRepository: Repository<Allocation>,
   ) {}
 
   async findAll(): Promise<Allocation[]> {
-    return this.allocationssRepository.find();
+    return this.allocationsRepository.find();
+  }
+
+  async findAllActive(
+    projectView: boolean,
+    projectOrStaffMemberId: number,
+    proposalId?: number,
+  ): Promise<Allocation[]> {
+    return this.allocationsRepository
+      .createQueryBuilder('allocation')
+      .leftJoinAndSelect(
+        `allocation.${projectView ? 'staffMember' : 'project'}`,
+        projectView ? 'staffMember' : 'project',
+      )
+      .leftJoin('allocation.createdIn', 'createdIn')
+      .where(`allocation.${projectView ? 'staffMember' : 'project'}Id = :id`, {
+        id: projectOrStaffMemberId,
+      })
+      .andWhere(
+        '(createdIn.submittedAt <= NOW() OR createdInId = :proposalId)',
+        { proposalId },
+      )
+      .getMany();
   }
 
   async findOne(id: number): Promise<Allocation | null> {
-    return this.allocationssRepository.findOneBy({ id });
+    return this.allocationsRepository.findOneBy({ id });
   }
 
   async create(allocationDto: CreateAllocationDto): Promise<Allocation> {
-    return this.allocationssRepository.save(
-      this.allocationssRepository.create(allocationDto),
+    return this.allocationsRepository.save(
+      this.allocationsRepository.create(allocationDto),
     );
   }
 
   async remove(id: number): Promise<void> {
-    await this.allocationssRepository.delete(id);
+    await this.allocationsRepository.delete(id);
   }
 }
