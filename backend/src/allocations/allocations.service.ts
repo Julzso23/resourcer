@@ -1,14 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Allocation } from 'entities/allocation.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAllocationDto } from '../../../dtos/createAllocation.dto';
+import { Proposal } from 'entities/proposal.entity';
+import { ProjectsService } from 'projects/projects.service';
+import { StaffService } from 'staff/staff.service';
 
 @Injectable()
 export class AllocationsService {
   constructor(
     @InjectRepository(Allocation)
     private allocationsRepository: Repository<Allocation>,
+    private projectsService: ProjectsService,
+    private staffService: StaffService,
   ) {}
 
   async findAll(): Promise<Allocation[]> {
@@ -47,7 +52,27 @@ export class AllocationsService {
     );
   }
 
+  async edit(allocationId: number, allocationDto: CreateAllocationDto): Promise<Allocation> {
+    const oldAllocation = await this.findOne(allocationId);
+    if (oldAllocation != null) {
+      const proposal = new Proposal();
+      proposal.id = allocationDto.createdInId;
+      oldAllocation?.deletedIn.push(proposal);
+      this.allocationsRepository.save(oldAllocation);
+    } else {
+      throw new NotFoundException();
+    }
+    return this.allocationsRepository.save(
+      this.allocationsRepository.create(allocationDto),
+    );
+  }
+
   async remove(id: number): Promise<void> {
     await this.allocationsRepository.delete(id);
+  }
+
+  async getName(projectView: boolean, staffMemberId: number, projectId: number): Promise<string> {
+    const collection = projectView ? await (projectView ? this.staffService : this.projectsService).findOne(projectView ? staffMemberId : projectId) : undefined;
+    return collection?.name || '';
   }
 }

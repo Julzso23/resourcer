@@ -5,4 +5,5 @@ export class CreateAllocationDto {
   start: Date;
   end: Date;
   createdInId: number;
+  projectView: boolean;
 }
