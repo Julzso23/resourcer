@@ -26,6 +26,7 @@ export function Allocation({ allocation, interval }: {
   const [intervalOverride, setIntervalOverride] = useState<Interval | undefined>(undefined)
   const [leftOffset, setLeftOffset] = useState<number>(0)
   const [rightOffset, setRightOffset] = useState<number>(0)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const isOverflowingLeft: boolean = (intervalOverride || allocation.interval).start!.diff(interval.start!).as('days') < 0
   const isOverflowingRight: boolean = (intervalOverride || allocation.interval).end!.diff(interval.end!).as('days') > 0
@@ -36,6 +37,8 @@ export function Allocation({ allocation, interval }: {
     'rounded-sm'
 
   const onPointerDown = useCallback((event: React.PointerEvent, newState: AllocationState) => {
+    if (loading) return
+
     setDragState(newState)
     const rowWidth: number = ref.current!.parentElement!.getBoundingClientRect().width
     setLeftOffset(
@@ -48,9 +51,11 @@ export function Allocation({ allocation, interval }: {
     element.setPointerCapture(event.pointerId)
     event.preventDefault()
     event.stopPropagation()
-  }, [setDragState, setLeftOffset, setRightOffset, ref, interval, allocation, intervalOverride])
+  }, [ref, interval, allocation, intervalOverride, loading])
 
   const onPointerMove = useCallback((event: React.PointerEvent) => {
+    if (loading) return
+
     const rowX: number = ref.current!.parentElement!.getBoundingClientRect().x
     const rowWidth: number = ref.current!.parentElement!.getBoundingClientRect().width
     switch (dragState) {
@@ -78,12 +83,14 @@ export function Allocation({ allocation, interval }: {
 
     event.preventDefault()
     event.stopPropagation()
-  }, [dragState, leftOffset, rightOffset, setIntervalOverride, allocation, interval, ref])
+  }, [dragState, leftOffset, rightOffset, allocation, interval, ref, loading])
 
   const dispatch = useDispatch<Dispatch>()
   const currentProposal = useSelector<RootState, number | undefined>(state => state.planner.currentProposal)
   const projectView = useSelector<RootState, boolean>(state => state.planner.projectView)
   const onPointerUp = useCallback((event: React.PointerEvent) => {
+    if (loading) return
+
     setDragState(AllocationState.Idle)
     const element: HTMLElement = event.target as HTMLElement
     element.releasePointerCapture(event.pointerId)
@@ -91,6 +98,7 @@ export function Allocation({ allocation, interval }: {
     event.stopPropagation()
 
     if (intervalOverride != null && !intervalOverride.equals(allocation.interval)) {
+      setLoading(true)
       dispatch.planner.editAllocation({
         oldAllocation: allocation,
         newAllocation: new CreateAllocationDto(
@@ -102,22 +110,27 @@ export function Allocation({ allocation, interval }: {
           currentProposal!,
           projectView,
         ),
-      })
+      }).then(() => setLoading(false))
     }
-  }, [setDragState, intervalOverride, dispatch, allocation, currentProposal, projectView])
+  }, [intervalOverride, dispatch, allocation, currentProposal, projectView, loading])
 
   return (
     <div
       ref={ref}
-      className={`absolute border top-1/8 h-3/4 bg-green-950 border-emerald-950 shadow box-border select-none flex flex-row cursor-move group touch-none ${dragState !== AllocationState.Idle ? 'shadow-black' : ''} ${borderRadiusClasses}`}
+      className={`absolute border top-1/8 h-3/4 bg-green-950 border-emerald-950 shadow box-border select-none flex
+        flex-row cursor-move group touch-none
+        ${dragState !== AllocationState.Idle ? 'shadow-black' : ''} ${borderRadiusClasses}
+        ${loading ? 'animate-pulse' : ''}`}
       style={{ left: allocationLeft(intervalOverride || allocation.interval), width: allocationWidth(intervalOverride || allocation.interval) }}
       onPointerDown={event => onPointerDown(event, AllocationState.Move)}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}>
-      { isOverflowingLeft ? undefined : <AllocationResizeHandle onPointerDown={event => onPointerDown(event, AllocationState.ResizeLeft)} onPointerMove={onPointerMove} onPointerUp={onPointerUp} /> }
+      { !isOverflowingLeft && <AllocationResizeHandle onPointerDown={event => onPointerDown(event, AllocationState.ResizeLeft)} onPointerMove={onPointerMove} onPointerUp={onPointerUp} /> }
       <span className="px-2 overflow-hidden text-ellipsis">{ allocation.name } - { allocation.percent }%</span>
-      { isOverflowingRight ? undefined : <AllocationResizeHandle onPointerDown={event => onPointerDown(event, AllocationState.ResizeRight)} onPointerMove={onPointerMove} onPointerUp={onPointerUp} right={true} /> }
+      { !isOverflowingRight && <AllocationResizeHandle onPointerDown={event => onPointerDown(event, AllocationState.ResizeRight)} onPointerMove={onPointerMove} onPointerUp={onPointerUp} right={true} /> }
+
+      { loading && <div className="absolute left-0 right-0 top-0 bottom-0 cursor-not-allowed backdrop-blur-[2px]"></div> }
     </div>
   )
 }
