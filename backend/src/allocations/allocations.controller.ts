@@ -5,16 +5,20 @@ import { AllocationsService } from './allocations.service';
 
 @Controller('allocations')
 export class AllocationsController {
-  constructor(
-    private allocationsService: AllocationsService,
-  ) {}
+  constructor(private allocationsService: AllocationsService) {}
 
   @Post()
-  async create(@Body() allocationDto: CreateAllocationDto): Promise<AllocationDto> {
+  async create(
+    @Body() allocationDto: CreateAllocationDto,
+  ): Promise<AllocationDto> {
     const allocation = await this.allocationsService.create(allocationDto);
     return new AllocationDto(
       allocation.id,
-      await this.allocationsService.getName(allocationDto.projectView, allocationDto.staffMemberId, allocationDto.projectId),
+      await this.allocationsService.getName(
+        allocationDto.projectView,
+        allocationDto.staffMemberId,
+        allocationDto.projectId,
+      ),
       allocation.percentage,
       allocation.start,
       allocation.end,
@@ -24,11 +28,18 @@ export class AllocationsController {
   }
 
   @Put(':id')
-  async edit(@Param('id') id: number, @Body() allocationDto: CreateAllocationDto): Promise<AllocationDto> {
+  async edit(
+    @Param('id') id: number,
+    @Body() allocationDto: CreateAllocationDto,
+  ): Promise<AllocationDto> {
     const allocation = await this.allocationsService.edit(id, allocationDto);
     return new AllocationDto(
       allocation.id,
-      await this.allocationsService.getName(allocationDto.projectView, allocationDto.staffMemberId, allocationDto.projectId),
+      await this.allocationsService.getName(
+        allocationDto.projectView,
+        allocationDto.staffMemberId,
+        allocationDto.projectId,
+      ),
       allocation.percentage,
       allocation.start,
       allocation.end,

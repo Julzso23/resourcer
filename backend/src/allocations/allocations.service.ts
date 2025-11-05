@@ -42,11 +42,11 @@ export class AllocationsService {
         { proposalId },
       )
       .andWhere(
-        '((removals.id IS NULL) OR (removalProposal.submittedAt IS NULL))'
+        '((removals.id IS NULL) OR (removalProposal.submittedAt IS NULL))',
       )
       .andWhere(
         '((removals.id IS NULL) OR (removalProposal.id != :proposalId))',
-        { proposalId }
+        { proposalId },
       )
       .getMany();
   }
@@ -66,20 +66,31 @@ export class AllocationsService {
     return this.allocationsRepository.save(allocation);
   }
 
-  async edit(allocationId: number, allocationDto: CreateAllocationDto): Promise<Allocation> {
+  async edit(
+    allocationId: number,
+    allocationDto: CreateAllocationDto,
+  ): Promise<Allocation> {
     await this.remove(allocationId, allocationDto.createdInId);
     return this.create(allocationDto);
   }
 
   async remove(id: number, proposalId: number): Promise<void> {
-    await this.allocationRemovalsRepository.save(this.allocationRemovalsRepository.create({
-      allocation: { id },
-      proposal: { id: proposalId },
-    }));
+    await this.allocationRemovalsRepository.save(
+      this.allocationRemovalsRepository.create({
+        allocation: { id },
+        proposal: { id: proposalId },
+      }),
+    );
   }
 
-  async getName(projectView: boolean, staffMemberId: number, projectId: number): Promise<string> {
-    const collection = await ((projectView ? this.staffService : this.projectsService).findOne(projectView ? staffMemberId : projectId));
+  async getName(
+    projectView: boolean,
+    staffMemberId: number,
+    projectId: number,
+  ): Promise<string> {
+    const collection = await (
+      projectView ? this.staffService : this.projectsService
+    ).findOne(projectView ? staffMemberId : projectId);
     return collection?.name || '';
   }
 }

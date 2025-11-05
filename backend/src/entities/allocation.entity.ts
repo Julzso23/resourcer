@@ -40,7 +40,7 @@ export class Allocation {
   @ManyToOne(() => Proposal, { nullable: false })
   createdIn: Proposal;
 
-  @OneToMany(() => AllocationRemoval, removal => removal.allocation)
+  @OneToMany(() => AllocationRemoval, (removal) => removal.allocation)
   removals: AllocationRemoval[];
 
   @CreateDateColumn()
