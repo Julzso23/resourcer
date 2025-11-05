@@ -2,6 +2,9 @@ import { Ref, useCallback, useRef, useState } from "react"
 import { AllocationModel } from "../Planner"
 import { DateTime, Interval } from "luxon"
 import { AllocationResizeHandle } from "./AllocationResizeHandle"
+import { useDispatch, useSelector } from "react-redux"
+import { Dispatch, RootState } from "../../../store"
+import { CreateAllocationDto } from "../../../../../dtos/createAllocation.dto"
 
 enum AllocationState {
   Idle,
@@ -77,13 +80,31 @@ export function Allocation({ allocation, interval }: {
     event.stopPropagation()
   }, [dragState, leftOffset, rightOffset, setIntervalOverride, allocation, interval, ref])
 
+  const dispatch = useDispatch<Dispatch>()
+  const currentProposal = useSelector<RootState, number | undefined>(state => state.planner.currentProposal)
+  const projectView = useSelector<RootState, boolean>(state => state.planner.projectView)
   const onPointerUp = useCallback((event: React.PointerEvent) => {
     setDragState(AllocationState.Idle)
     const element: HTMLElement = event.target as HTMLElement
     element.releasePointerCapture(event.pointerId)
     event.preventDefault()
     event.stopPropagation()
-  }, [setDragState])
+
+    if (intervalOverride != null && !intervalOverride.equals(allocation.interval)) {
+      dispatch.planner.editAllocation({
+        oldAllocation: allocation,
+        newAllocation: new CreateAllocationDto(
+          allocation.staffMemberId,
+          allocation.projectId,
+          allocation.percent,
+          intervalOverride.start!.toJSDate(),
+          intervalOverride.end!.toJSDate(),
+          currentProposal!,
+          projectView,
+        ),
+      })
+    }
+  }, [setDragState, intervalOverride, dispatch, allocation, currentProposal, projectView])
 
   return (
     <div

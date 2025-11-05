@@ -8,17 +8,12 @@ import { Dispatch, RootState } from "../../store";
 import { AllocationDto } from "../../../../dtos/allocation.dto";
 import { AllocationCollectionDto } from "../../../../dtos/allocationCollection.dto";
 
-export class AllocationModel {
-  id: number
-  name: string
+export class AllocationModel extends AllocationDto {
   interval: Interval
-  percent: number
 
-  constructor(dto: AllocationDto) {
-    this.id = dto.id
-    this.name = dto.name
-    this.interval = Interval.fromDateTimes(new Date(dto.start), new Date(dto.end))
-    this.percent = dto.percent
+  constructor(allocation: AllocationDto) {
+    super(allocation.id, allocation.name, allocation.percent, allocation.start, allocation.end, allocation.staffMemberId, allocation.projectId)
+    this.interval = Interval.fromDateTimes(new Date(allocation.start), new Date(allocation.end))
   }
 }
 
@@ -49,7 +44,7 @@ export function Planner() {
 
   const dispatch = useDispatch<Dispatch>()
   useEffect(() => {
-    dispatch.planner.getAllocationCollections({ projectView: false, withProposal: 1 })
+    dispatch.planner.getAllocationCollections({ projectView: false })
   }, [dispatch])
 
   const allocationCollections = useSelector<RootState, AllocationCollectionDto[]>(state => state.planner.allocationCollections)

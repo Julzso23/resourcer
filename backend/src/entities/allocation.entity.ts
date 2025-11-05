@@ -3,9 +3,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,6 +12,7 @@ import { StaffMember } from './staffMember.entity';
 import { User } from './user.entity';
 import { Project } from './project.entity';
 import { Proposal } from './proposal.entity';
+import { AllocationRemoval } from './allocationRemoval.entity';
 
 @Entity()
 export class Allocation {
@@ -40,9 +40,8 @@ export class Allocation {
   @ManyToOne(() => Proposal, { nullable: false })
   createdIn: Proposal;
 
-  @ManyToMany(() => Proposal)
-  @JoinTable()
-  deletedIn: Proposal[];
+  @OneToMany(() => AllocationRemoval, removal => removal.allocation)
+  removals: AllocationRemoval[];
 
   @CreateDateColumn()
   createdAt: Date;

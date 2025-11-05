@@ -64,6 +64,8 @@ export class ProposalsService {
                     allocation.percentage,
                     allocation.start,
                     allocation.end,
+                    allocation.staffMember?.id || -1,
+                    allocation.project?.id || -1,
                   ),
               ),
             ),

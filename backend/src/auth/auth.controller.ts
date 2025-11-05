@@ -19,7 +19,6 @@ export class AuthController {
   @Public()
   @Post('register')
   async register(@Body() userDto: CreateUserDto): Promise<{ token: string }> {
-    console.log('register');
     return { token: await this.authService.register(userDto) };
   }
 
