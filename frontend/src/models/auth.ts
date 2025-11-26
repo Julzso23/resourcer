@@ -1,4 +1,4 @@
-import { createModel, RematchDispatch } from "@rematch/core";
+import { createModel } from "@rematch/core";
 import { RootModel } from ".";
 import { Api } from "../api";
 
@@ -16,14 +16,28 @@ export const auth = createModel<RootModel>()({
       return state
     }
   },
-  effects: (dispatch: RematchDispatch<RootModel>) => ({
+  effects: {
     async login(payload: FormData) {
       const token: string = (await Api.post<AuthState>('auth/login', {
           email: payload.get('email')!.toString(),
           password: payload.get('password')!.toString(),
         })).token
       localStorage.setItem('jwt', token)
-      dispatch.auth.setToken(token)
+      this.setToken(token)
+    },
+
+    async logout() {
+      this.setToken(undefined)
+    },
+
+    async register(payload: FormData) {
+      const token: string = (await Api.post<AuthState>('auth/register', {
+          name: payload.get('name')!.toString(),
+          email: payload.get('email')!.toString(),
+          password: payload.get('password')!.toString(),
+        })).token
+      localStorage.setItem('jwt', token)
+      this.setToken(token)
     }
-  })
+  }
 })

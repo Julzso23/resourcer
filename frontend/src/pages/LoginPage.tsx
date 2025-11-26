@@ -1,19 +1,19 @@
-import { redirect } from "react-router-dom"
 import { store } from '../store'
+import { LoginForm } from "../components/login/LoginForm"
+import { useNavigate } from 'react-router-dom'
+import { useCallback } from 'react'
 
 export function LoginPage() {
-  async function submit(formData: FormData) {
+  const navigate = useNavigate()
+
+  const submit = useCallback(async (formData: FormData) => {
     await store.dispatch.auth.login(formData)
-    redirect('/')
-  }
+    navigate('/')
+  }, [navigate, store])
 
   return (
-    <>
-      <form action={submit}>
-        <input type="email" name="email" placeholder="Email address"></input>
-        <input type="password" name="password" placeholder="Password"></input>
-        <button type="submit">Login</button>
-      </form>
-    </>
+    <div className="flex flex-row justify-center pt-16">
+      <LoginForm action={submit} />
+    </div>
   )
 }

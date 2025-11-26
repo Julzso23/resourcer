@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "process",
+      "label": "Docker Dev",
+      "command": "docker compose -f ./compose-dev.yaml -p resourcer-dev watch",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

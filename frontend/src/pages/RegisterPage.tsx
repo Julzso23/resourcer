@@ -1,31 +1,19 @@
-import { redirect } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { store } from "../store"
+import { RegisterForm } from "../components/login/RegisterForm"
+import { useCallback } from "react"
 
 export function RegisterPage() {
-  function submit(formData: FormData): void {
-    fetch('http://127.0.0.1:3000/auth/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: formData.get('name'),
-        email: formData.get('email'),
-        password: formData.get('password'),
-      })
-    }).then(async response => {
-      localStorage.setItem('jwt', (await response.json()).token)
-      redirect('/')
-    })
-  }
+  const navigate = useNavigate()
+
+  const submit = useCallback(async (formData: FormData) => {
+    await store.dispatch.auth.register(formData)
+    navigate('/')
+  }, [navigate, store])
 
   return (
-    <>
-      <form action={submit}>
-        <input type="text" name="name" placeholder="Name"></input>
-        <input type="email" name="email" placeholder="Email address"></input>
-        <input type="password" name="password" placeholder="Password"></input>
-        <button type="submit">Register</button>
-      </form>
-    </>
+    <div className="flex flex-row justify-center pt-16">
+      <RegisterForm action={submit} />
+    </div>
   )
 }
