@@ -5,6 +5,7 @@ import { Api } from "../api"
 import { ProposalAllocationsDto } from '../../../dtos/proposalAllocations.dto'
 import { AllocationDto } from "../../../dtos/allocation.dto"
 import { CreateAllocationDto } from "../../../dtos/createAllocation.dto"
+import { history } from "../history"
 
 interface PlannerState {
   projectView: boolean
@@ -49,31 +50,50 @@ export const planner = createModel<RootModel>()({
     },
   },
 
-  effects: {
+  effects: (dispatch) => ({
+    handleError({ error }: { error: any }) {
+      if (error === 401) {
+        dispatch.auth.logout()
+        history.replace('/login')
+      }
+    },
+
     async getAllocationCollections({ projectView }: {
       projectView: boolean,
     }, rootState) {
-      const proposalAllocations = await Api.get<ProposalAllocationsDto>('proposals/master', {
-        ...(projectView && { projectView: 'true' }),
-        ...(rootState.planner.currentProposal && { withProposal: rootState.planner.currentProposal.toString() }),
-      }, rootState.auth.token)
-      this.setAllocationCollections(proposalAllocations.collections)
+      try {
+        const proposalAllocations = await Api.get<ProposalAllocationsDto>('proposals/master', {
+          ...(projectView && { projectView: 'true' }),
+          ...(rootState.planner.currentProposal && { withProposal: rootState.planner.currentProposal.toString() }),
+        }, rootState.auth.token)
+        this.setAllocationCollections(proposalAllocations.collections)
+      } catch (error) {
+        this.handleError({ error })
+      }
     },
 
     async createAllocation({ allocation }: {
       allocation: CreateAllocationDto,
     }, rootState) {
-      const newAllocation = await Api.post<AllocationDto>('allocations', allocation, rootState.auth.token)
-      this.addAllocation(newAllocation)
+      try {
+        const newAllocation = await Api.post<AllocationDto>('allocations', allocation, rootState.auth.token)
+        this.addAllocation(newAllocation)
+      } catch (error) {
+        this.handleError({ error })
+      }
     },
 
     async editAllocation({ oldAllocation, newAllocation }: {
       oldAllocation: AllocationDto,
       newAllocation: CreateAllocationDto,
     }, rootState) {
-      const allocation = await Api.put<AllocationDto>(`allocations/${oldAllocation.id}`, newAllocation, rootState.auth.token)
-      this.removeAllocation(oldAllocation)
-      this.addAllocation(allocation)
+      try {
+        const allocation = await Api.put<AllocationDto>(`allocations/${oldAllocation.id}`, newAllocation, rootState.auth.token)
+        this.removeAllocation(oldAllocation)
+        this.addAllocation(allocation)
+      } catch (error) {
+        this.handleError({ error })
+      }
     },
-  },
+  }),
 })

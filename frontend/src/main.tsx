@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes, unstable_HistoryRouter as HistoryRouter } from 'react-router-dom'
 import { App } from './App'
 import './index.css'
 import { LoginPage } from './pages/LoginPage'
@@ -9,11 +9,12 @@ import { PlannerPage } from './pages/PlannerPage'
 import { Provider } from 'react-redux'
 import { store } from './store'
 import { Navbar } from './components/navbar/Navbar'
+import { history } from './history'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Provider store={ store }>
+    <Provider store={ store }>
+      <HistoryRouter history={history}>
         <Navbar />
         <Routes>
           <Route path="/" element={<App />} />
@@ -21,7 +22,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="register" element={<RegisterPage />} />
           <Route path="planner" element={<PlannerPage />} />
         </Routes>
-      </Provider>
-    </BrowserRouter>
+      </HistoryRouter>
+    </Provider>
   </StrictMode>,
 )

@@ -8,7 +8,12 @@ export class Api {
         },
         body: JSON.stringify(body)
       })
-      .then(response => response.json())
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw response.status
+      })
   }
 
   static post<type>(path: string, body: object, authToken?: string): Promise<type> {

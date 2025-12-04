@@ -7,8 +7,7 @@ export function RegisterPage() {
   const navigate = useNavigate()
 
   const submit = useCallback(async (formData: FormData) => {
-    await store.dispatch.auth.register(formData)
-    navigate('/')
+    store.dispatch.auth.register(formData).then(() => navigate('/'))
   }, [navigate, store])
 
   return (

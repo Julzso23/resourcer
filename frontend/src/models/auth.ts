@@ -19,11 +19,13 @@ export const auth = createModel<RootModel>()({
   effects: {
     async login(payload: FormData) {
       const token: string = (await Api.post<AuthState>('auth/login', {
-          email: payload.get('email')!.toString(),
-          password: payload.get('password')!.toString(),
-        })).token
-      localStorage.setItem('jwt', token)
-      this.setToken(token)
+        email: payload.get('email')!.toString(),
+        password: payload.get('password')!.toString(),
+      })).token
+      if (token) {
+        localStorage.setItem('jwt', token)
+        this.setToken(token)
+      }
     },
 
     async logout() {
@@ -36,8 +38,10 @@ export const auth = createModel<RootModel>()({
           email: payload.get('email')!.toString(),
           password: payload.get('password')!.toString(),
         })).token
-      localStorage.setItem('jwt', token)
-      this.setToken(token)
+      if (token) {
+        localStorage.setItem('jwt', token)
+        this.setToken(token)
+      }
     }
   }
 })
