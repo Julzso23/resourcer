@@ -25,9 +25,9 @@ export const staff = createModel<RootModel>()({
       }
     },
 
-    async getStaffMembers({}, rootState) {
+    async getStaffMembers({ searchValue }, rootState) {
       try {
-        this.setStaffMembers(await Api.get<StaffMemberDto[]>('staff', undefined, rootState.auth.token || undefined))
+        this.setStaffMembers(await Api.get<StaffMemberDto[]>('staff', { searchValue }, rootState.auth.token || undefined))
       } catch (error) {
         this.handleError({ error })
       }
