@@ -7,6 +7,7 @@ export function Navbar() {
       <div className="flex flex-row gap-1 w-9/10">
         <NavItem to="/">Home</NavItem>
         <NavItem to="/planner">Planner</NavItem>
+        <NavItem to="/staff">Staff</NavItem>
         <NavbarUser />
       </div>
     </nav>

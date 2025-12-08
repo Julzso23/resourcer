@@ -6,6 +6,7 @@ import './index.css'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { PlannerPage } from './pages/PlannerPage'
+import { StaffPage } from './pages/StaffPage'
 import { Provider } from 'react-redux'
 import { store } from './store'
 import { Navbar } from './components/navbar/Navbar'
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="planner" element={<PlannerPage />} />
+          <Route path="staff" element={<StaffPage />} />
         </Routes>
       </HistoryRouter>
     </Provider>

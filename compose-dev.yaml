@@ -16,6 +16,10 @@ services:
         action: sync
         target: /usr/local/app/backend/src
         initial_sync: true
+      - path: ./dtos
+        action: sync
+        target: /usr/local/app/dtos
+        initial_sync: true
       - path: ./backend/package.json
         action: rebuild
     ports:
@@ -30,6 +34,10 @@ services:
       - path: ./frontend/src
         action: sync
         target: /usr/local/app/frontend/src
+        initial_sync: true
+      - path: ./dtos
+        action: sync
+        target: /usr/local/app/dtos
         initial_sync: true
       - path: ./frontend/package.json
         action: rebuild

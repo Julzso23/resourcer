@@ -16,19 +16,19 @@ export class Api {
       })
   }
 
-  static post<type>(path: string, body: object, authToken?: string): Promise<type> {
+  static post<type>(path: string, body?: object, authToken?: string): Promise<type> {
     return Api.request<type>('POST', path, body, authToken)
   }
 
-  static get<type>(path: string, params: Record<string, string>, authToken?: string): Promise<type> {
-    return Api.request<type>('GET', path + '?' + new URLSearchParams(params).toString(), undefined, authToken)
+  static get<type>(path: string, params?: Record<string, string>, authToken?: string): Promise<type> {
+    return Api.request<type>('GET', path + (params != null ? '?' + new URLSearchParams(params).toString() : ''), undefined, authToken)
   }
 
-  static put<type>(path: string, body: object, authToken?: string): Promise<type> {
+  static put<type>(path: string, body?: object, authToken?: string): Promise<type> {
     return Api.request<type>('PUT', path, body, authToken)
   }
 
-  static delete<type>(path: string, body: object, authToken?: string): Promise<type> {
+  static delete<type>(path: string, body?: object, authToken?: string): Promise<type> {
     return Api.request<type>('DELETE', path, body, authToken)
   }
 }
