@@ -8,7 +8,6 @@ export class StaffController {
 
   @Get()
   async getAll(@Query('searchValue') searchValue?: string): Promise<StaffMemberDto[]> {
-    console.log(searchValue)
     return (await this.staffService.findWithSearch(searchValue)).map(staffMember => new StaffMemberDto(staffMember.id, staffMember.name));
   }
 }
