@@ -65,7 +65,7 @@ export const planner = createModel<RootModel>()({
         const proposalAllocations = await Api.get<ProposalAllocationsDto>('proposals/master', {
           ...(projectView && { projectView: 'true' }),
           ...(rootState.planner.currentProposal && { withProposal: rootState.planner.currentProposal.toString() }),
-        }, rootState.auth.token)
+        }, rootState.auth.token || undefined)
         this.setAllocationCollections(proposalAllocations.collections)
       } catch (error) {
         this.handleError({ error })
@@ -76,7 +76,7 @@ export const planner = createModel<RootModel>()({
       allocation: CreateAllocationDto,
     }, rootState) {
       try {
-        const newAllocation = await Api.post<AllocationDto>('allocations', allocation, rootState.auth.token)
+        const newAllocation = await Api.post<AllocationDto>('allocations', allocation, rootState.auth.token || undefined)
         this.addAllocation(newAllocation)
       } catch (error) {
         this.handleError({ error })
@@ -88,7 +88,7 @@ export const planner = createModel<RootModel>()({
       newAllocation: CreateAllocationDto,
     }, rootState) {
       try {
-        const allocation = await Api.put<AllocationDto>(`allocations/${oldAllocation.id}`, newAllocation, rootState.auth.token)
+        const allocation = await Api.put<AllocationDto>(`allocations/${oldAllocation.id}`, newAllocation, rootState.auth.token || undefined)
         this.removeAllocation(oldAllocation)
         this.addAllocation(allocation)
       } catch (error) {

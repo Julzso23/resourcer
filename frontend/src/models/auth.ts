@@ -3,7 +3,7 @@ import { RootModel } from ".";
 import { Api } from "../api";
 
 interface AuthState {
-  token: string
+  token: string | null
 }
 
 export const auth = createModel<RootModel>()({
@@ -12,34 +12,36 @@ export const auth = createModel<RootModel>()({
   } as AuthState,
   reducers: {
     setToken(state: AuthState, payload: string): AuthState {
-      state.token = payload
-      return state
+      if (payload == null) {
+        localStorage.removeItem('jwt')
+      } else {
+        localStorage.setItem('jwt', payload)
+      }
+      return { ...state, token: payload }
     }
   },
   effects: {
     async login(payload: FormData) {
-      const token: string = (await Api.post<AuthState>('auth/login', {
+      const token: string | null = (await Api.post<AuthState>('auth/login', {
         email: payload.get('email')!.toString(),
         password: payload.get('password')!.toString(),
       })).token
       if (token) {
-        localStorage.setItem('jwt', token)
         this.setToken(token)
       }
     },
 
     async logout() {
-      this.setToken(undefined)
+      this.setToken(null)
     },
 
     async register(payload: FormData) {
-      const token: string = (await Api.post<AuthState>('auth/register', {
+      const token: string | null = (await Api.post<AuthState>('auth/register', {
           name: payload.get('name')!.toString(),
           email: payload.get('email')!.toString(),
           password: payload.get('password')!.toString(),
         })).token
       if (token) {
-        localStorage.setItem('jwt', token)
         this.setToken(token)
       }
     }
