@@ -5,7 +5,6 @@ import { Api } from "../api"
 import { ProposalAllocationsDto } from '../../../dtos/proposalAllocations.dto'
 import { AllocationDto } from "../../../dtos/allocation.dto"
 import { CreateAllocationDto } from "../../../dtos/createAllocation.dto"
-import { history } from "../history"
 
 interface PlannerState {
   projectView: boolean
@@ -54,7 +53,6 @@ export const planner = createModel<RootModel>()({
     handleError({ error }: { error: any }) {
       if (error === 401) {
         dispatch.auth.logout()
-        history.replace('/login')
       }
     },
 

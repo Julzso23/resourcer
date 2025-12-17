@@ -1,6 +1,7 @@
 import { createModel } from "@rematch/core";
 import { RootModel } from ".";
 import { Api } from "../api";
+import { history } from "../history";
 
 interface AuthState {
   token: string | null
@@ -33,6 +34,7 @@ export const auth = createModel<RootModel>()({
 
     async logout() {
       this.setToken(null)
+      history.push('/login', { from: history.location })
     },
 
     async register(payload: FormData) {

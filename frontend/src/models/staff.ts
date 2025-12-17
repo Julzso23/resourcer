@@ -2,7 +2,6 @@ import { createModel } from "@rematch/core"
 import { RootModel } from "."
 import { Api } from "../api"
 import { StaffMemberDto } from "../../../dtos/staffMember.dto"
-import { history } from "../history"
 
 interface StaffState {
   staffMembers: StaffMemberDto[]
@@ -21,7 +20,6 @@ export const staff = createModel<RootModel>()({
     handleError({ error }: { error: any }) {
       if (error === 401) {
         dispatch.auth.logout()
-        history.replace('/login')
       }
     },
 
