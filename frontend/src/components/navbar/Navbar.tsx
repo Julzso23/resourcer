@@ -8,6 +8,7 @@ export function Navbar() {
         <NavItem to="/">Home</NavItem>
         <NavItem to="/planner">Planner</NavItem>
         <NavItem to="/staff">Staff</NavItem>
+        <NavItem to="/projects">Projects</NavItem>
         <NavbarUser />
       </div>
     </nav>

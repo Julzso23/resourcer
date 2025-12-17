@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { StaffMember } from 'src/entities/staffMember.entity';
+import { StaffMember } from 'entities/staffMember.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
+import { searchField } from 'queryHelpers';
 
 @Injectable()
 export class StaffService {
@@ -15,20 +16,7 @@ export class StaffService {
   }
 
   async findWithSearch(searchValue?: string): Promise<StaffMember[]> {
-    const searchTerms: string[] | undefined = searchValue?.trim().split(/\s/);
-    let builder = this.staffRepository.createQueryBuilder();
-    for (const i in searchTerms) {
-      if (i == '0') {
-        builder = builder.where({
-          name: Like(`%${searchTerms[i]}%`)
-        })
-      } else {
-        builder = builder.orWhere({
-          name: Like(`%${searchTerms[i]}%`)
-        })
-      }
-    }
-    return builder.getMany();
+    return searchField(this.staffRepository.createQueryBuilder(), 'name', searchValue).getMany();
   }
 
   async findOne(id: number): Promise<StaffMember | null> {
