@@ -34,7 +34,7 @@ export class AllocationsService {
       .leftJoin('allocation.createdIn', 'createdIn')
       .leftJoin('allocation.removals', 'removals')
       .leftJoin('removals.proposal', 'removalProposal')
-      .where(`allocation.${projectView ? 'staffMember' : 'project'}Id = :id`, {
+      .where(`allocation.${projectView ? 'project' : 'staffMember'}Id = :id`, {
         id: projectOrStaffMemberId,
       })
       .andWhere(
