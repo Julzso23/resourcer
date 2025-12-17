@@ -12,6 +12,7 @@ import { store } from './store'
 import { Navbar } from './components/navbar/Navbar'
 import { history } from './history'
 import { ProjectsPage } from './pages/ProjectsPage'
+import { UsersPage } from './pages/UsersPage'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="planner" element={<PlannerPage />} />
           <Route path="staff" element={<StaffPage />} />
           <Route path="projects" element={<ProjectsPage />} />
+          <Route path="users" element={<UsersPage />} />
         </Routes>
       </HistoryRouter>
     </Provider>
