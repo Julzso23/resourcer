@@ -17,7 +17,7 @@ export function ProjectsPage() {
   useEffect(() => {
     setLoading(true)
     dispatch.projects.getProjects({searchValue}).then(() => setLoading(false))
-  }, [searchValue])
+  }, [searchValue, dispatch.projects])
 
   const projects = useSelector<RootState, ProjectDto[]>(state => state.projects.projects)
 

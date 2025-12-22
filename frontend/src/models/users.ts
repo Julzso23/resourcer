@@ -17,7 +17,7 @@ export const users = createModel<RootModel>()({
     }
   },
   effects: (dispatch) => ({
-    handleError({ error }: { error: any }) {
+    handleError({ error }) {
       if (error === 401) {
         dispatch.auth.logout()
       }

@@ -17,7 +17,7 @@ export function StaffPage() {
   useEffect(() => {
     setLoading(true)
     dispatch.staff.getStaffMembers({searchValue}).then(() => setLoading(false))
-  }, [searchValue])
+  }, [searchValue, dispatch.staff])
 
   const staffMembers = useSelector<RootState, StaffMemberDto[]>(state => state.staff.staffMembers)
 

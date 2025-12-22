@@ -1,7 +1,8 @@
-import { store } from '../store'
+import { Dispatch } from '../store'
 import { LoginForm } from "../components/login/LoginForm"
 import { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -9,8 +10,9 @@ export function LoginPage() {
 
   const [error, setError] = useState<number | undefined>(undefined)
 
+  const dispatch = useDispatch<Dispatch>()
   const submit = useCallback(async (formData: FormData) => {
-    store.dispatch.auth.login(formData)
+    dispatch.auth.login(formData)
       .then(() => {
         if (location.pathname == location.state?.from?.pathname) {
           navigate(-2)
@@ -19,7 +21,7 @@ export function LoginPage() {
         }
       })
       .catch((error) => setError(error))
-  }, [store, navigate, location])
+  }, [dispatch.auth, navigate, location])
 
   return (
     <div className="flex flex-row justify-center pt-16">

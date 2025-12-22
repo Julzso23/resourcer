@@ -17,7 +17,7 @@ export function UsersPage() {
   useEffect(() => {
     setLoading(true)
     dispatch.users.getUsers({searchValue}).then(() => setLoading(false))
-  }, [searchValue])
+  }, [searchValue, dispatch.users])
 
   const users = useSelector<RootState, UserDto[]>(state => state.users.users)
 
