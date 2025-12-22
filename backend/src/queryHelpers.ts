@@ -1,11 +1,17 @@
-import { Like, ObjectLiteral, SelectQueryBuilder } from "typeorm";
+import { Like, ObjectLiteral, SelectQueryBuilder } from 'typeorm';
 
-export function searchField<T extends ObjectLiteral>(query: SelectQueryBuilder<T>, fieldName: string, searchValue?: string): SelectQueryBuilder<T> {
+export function searchField<T extends ObjectLiteral>(
+  query: SelectQueryBuilder<T>,
+  fieldName: string,
+  searchValue?: string,
+): SelectQueryBuilder<T> {
   const searchTerms: string[] | undefined = searchValue?.trim().split(/\s/);
-  for (const i in searchTerms) {
-    query = query.orWhere({
-      [fieldName]: Like(`%${searchTerms[i]}%`)
-    });
+  if (searchTerms != null) {
+    for (const term of searchTerms) {
+      query = query.orWhere({
+        [fieldName]: Like(`%${term}%`),
+      });
+    }
   }
   return query;
 }

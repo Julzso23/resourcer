@@ -7,7 +7,11 @@ export class StaffController {
   constructor(private staffService: StaffService) {}
 
   @Get()
-  async getAll(@Query('searchValue') searchValue?: string): Promise<StaffMemberDto[]> {
-    return (await this.staffService.findWithSearch(searchValue)).map(staffMember => new StaffMemberDto(staffMember.id, staffMember.name));
+  async getAll(
+    @Query('searchValue') searchValue?: string,
+  ): Promise<StaffMemberDto[]> {
+    return (await this.staffService.findWithSearch(searchValue)).map(
+      (staffMember) => new StaffMemberDto(staffMember.id, staffMember.name),
+    );
   }
 }

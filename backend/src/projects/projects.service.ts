@@ -15,7 +15,11 @@ export class ProjectsService {
   }
 
   async findWithSearch(searchValue?: string): Promise<Project[]> {
-    return searchField(this.projectsRepository.createQueryBuilder(), 'name', searchValue).getMany();
+    return searchField(
+      this.projectsRepository.createQueryBuilder(),
+      'name',
+      searchValue,
+    ).getMany();
   }
 
   async findOne(id: number): Promise<Project | null> {

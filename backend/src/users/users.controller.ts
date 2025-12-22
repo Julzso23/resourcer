@@ -1,14 +1,28 @@
-import { Controller, Get, NotFoundException, Param, Query, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { User } from 'entities/user.entity';
 import { UsersService } from './users.service';
 import { UserDto } from '../../../dtos/user.dto';
+import { FastifyRequest } from 'fastify';
+
+interface Request extends FastifyRequest {
+  user: {
+    id: number;
+  };
+}
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get('me')
-  async getMe(@Req() request): Promise<UserDto> {
+  async getMe(@Req() request: Request): Promise<UserDto> {
     const user: User | null = await this.usersService.findOne(request.user.id);
     if (user == null) throw new NotFoundException();
     return new UserDto(user.id, user.name, user.email);
@@ -23,6 +37,8 @@ export class UsersController {
 
   @Get()
   async getAll(@Query('searchValue') searchValue?: string): Promise<UserDto[]> {
-    return (await this.usersService.findWithSearch(searchValue)).map(user => new UserDto(user.id, user.name, user.email));
+    return (await this.usersService.findWithSearch(searchValue)).map(
+      (user) => new UserDto(user.id, user.name, user.email),
+    );
   }
 }
