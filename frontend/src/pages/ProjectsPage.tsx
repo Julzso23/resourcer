@@ -26,7 +26,7 @@ export function ProjectsPage() {
       <TextInput type="text" placeholder="Search" value={_searchValue} onChange={e => setSearchValue(e.target.value)} />
       { loading ? (<Loading />) :
       (<div className="grid xl:grid-cols-8 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-2">
-        { projects.map(project => <StaffMemberCard key={project.id} name={project.name} />) }
+        { projects.map(project => <StaffMemberCard key={project.id} name={project.name} link={`/projects/${project.id}`} />) }
       </div>) }
     </div>
   )

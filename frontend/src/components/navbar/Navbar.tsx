@@ -9,6 +9,7 @@ export function Navbar() {
         <NavItem to="/planner">Planner</NavItem>
         <NavItem to="/staff">Staff</NavItem>
         <NavItem to="/projects">Projects</NavItem>
+        <NavItem to="/users">Users</NavItem>
         <NavbarUser />
       </div>
     </nav>
