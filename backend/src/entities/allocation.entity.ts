@@ -1,24 +1,18 @@
 import {
   Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { StaffMember } from './staffMember.entity';
 import { User } from './user.entity';
 import { Project } from './project.entity';
 import { Proposal } from './proposal.entity';
 import { AllocationRemoval } from './allocationRemoval.entity';
+import { BaseEntity } from './base.entity';
 
 @Entity()
-export class Allocation {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Allocation extends BaseEntity {
   @ManyToOne(() => StaffMember)
   staffMember?: StaffMember;
 
@@ -42,13 +36,4 @@ export class Allocation {
 
   @OneToMany(() => AllocationRemoval, (removal) => removal.allocation)
   removals: AllocationRemoval[];
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 }
