@@ -1,7 +1,4 @@
-import {
-  Entity,
-  ManyToOne,
-} from 'typeorm';
+import { Entity, ManyToOne } from 'typeorm';
 import { Allocation } from './allocation.entity';
 import { Proposal } from './proposal.entity';
 import { BaseEntity } from './base.entity';

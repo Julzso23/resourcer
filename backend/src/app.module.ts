@@ -9,6 +9,7 @@ import { AllocationsModule } from './allocations/allocations.module';
 import { StaffModule } from './staff/staff.module';
 import { ProjectsModule } from './projects/projects.module';
 import { ProposalsModule } from './proposals/proposals.module';
+import { PermissionsModule } from './permissions/permissions.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ProposalsModule } from './proposals/proposals.module';
     StaffModule,
     ProjectsModule,
     ProposalsModule,
+    PermissionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

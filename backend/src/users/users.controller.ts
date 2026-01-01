@@ -9,13 +9,7 @@ import {
 import { User } from 'entities/user.entity';
 import { UsersService } from './users.service';
 import { UserDto } from '../../../dtos/user.dto';
-import { FastifyRequest } from 'fastify';
-
-interface Request extends FastifyRequest {
-  user: {
-    id: number;
-  };
-}
+import { Request } from 'request';
 
 @Controller('users')
 export class UsersController {
