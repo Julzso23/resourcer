@@ -12,13 +12,13 @@ export const auth = createModel<RootModel>()({
     token: localStorage.getItem('jwt')
   } as AuthState,
   reducers: {
-    setToken(state: AuthState, payload: string): AuthState {
-      if (payload == null) {
+    setToken(state: AuthState, token: string): AuthState {
+      if (token == null) {
         localStorage.removeItem('jwt')
       } else {
-        localStorage.setItem('jwt', payload)
+        localStorage.setItem('jwt', token)
       }
-      return { ...state, token: payload }
+      return { ...state, token }
     }
   },
   effects: {

@@ -1,8 +1,9 @@
-import { Dispatch } from '../store'
+import { Dispatch, RootState } from '../store'
 import { LoginForm } from "../components/login/LoginForm"
 import { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { UserDto } from '../../../dtos/user.dto'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -22,6 +23,11 @@ export function LoginPage() {
       })
       .catch((error) => setError(error))
   }, [dispatch.auth, navigate, location])
+
+  const loggedInUser = useSelector<RootState, UserDto | undefined>(state => state.users.loggedInUser)
+  if (loggedInUser != null) {
+    navigate('/')
+  }
 
   return (
     <div className="flex flex-row justify-center pt-16">
