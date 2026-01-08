@@ -18,7 +18,7 @@ export const staff = createModel<RootModel>()({
     removeStaffMember(state, staffMemberId: number) {
       return {
         ...state,
-        projects: state.staffMembers.filter(
+        staffMembers: state.staffMembers.filter(
           (staffMember) => staffMember.id !== staffMemberId,
         ),
       }
@@ -50,14 +50,13 @@ export const staff = createModel<RootModel>()({
 
     async getStaffMember({ staffMemberId }, rootState) {
       try {
-        this.removeStaffMember(staffMemberId)
-        this.addStaffMember(
-          await Api.get<StaffMemberDto>(
-            `staff/${staffMemberId}`,
-            {},
-            rootState.auth.token || undefined,
-          ),
+        const staffMember = await Api.get<StaffMemberDto>(
+          `staff/${staffMemberId}`,
+          {},
+          rootState.auth.token || undefined,
         )
+        this.removeStaffMember(staffMember.id)
+        this.addStaffMember(staffMember)
       } catch (error) {
         this.handleError({ error })
       }

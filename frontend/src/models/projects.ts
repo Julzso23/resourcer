@@ -48,14 +48,13 @@ export const projects = createModel<RootModel>()({
 
     async getProject({ projectId }, rootState) {
       try {
-        this.removeProject(projectId)
-        this.addProject(
-          await Api.get<ProjectDto>(
-            `projects/${projectId}`,
-            {},
-            rootState.auth.token || undefined,
-          ),
+        const project = await Api.get<ProjectDto>(
+          `projects/${projectId}`,
+          {},
+          rootState.auth.token || undefined,
         )
+        this.removeProject(project.id)
+        this.addProject(project)
       } catch (error) {
         this.handleError({ error })
       }
