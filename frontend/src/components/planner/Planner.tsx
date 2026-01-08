@@ -42,9 +42,11 @@ export function Planner() {
   const [ columnCount, setColumnCount ] = useState<number>(12)
   const interval: Interval = Interval.after(startDate, { [zoomLevel]: columnCount })
 
+  const projectView = useSelector<RootState, boolean>(state => state.planner.projectView)
+
   const dispatch = useDispatch<Dispatch>()
   useEffect(() => {
-    dispatch.planner.getAllocationCollections({ projectView: false })
+    dispatch.planner.getAllocationCollections({ projectView })
   }, [dispatch])
 
   const allocationCollections = useSelector<RootState, AllocationCollectionDto[]>(state => state.planner.allocationCollections)
