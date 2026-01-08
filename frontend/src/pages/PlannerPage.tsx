@@ -1,7 +1,5 @@
-import { Planner } from "../components/planner/Planner";
+import { Planner } from '../components/planner/Planner'
 
 export function PlannerPage() {
-  return (
-    <Planner />
-  )
+  return <Planner />
 }

@@ -1,7 +1,7 @@
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
-import { CreateAllocationDto } from '../../../dtos/createAllocation.dto';
-import { AllocationDto } from '../../../dtos/allocation.dto';
-import { AllocationsService } from './allocations.service';
+import { Body, Controller, Param, Post, Put } from '@nestjs/common'
+import { CreateAllocationDto } from '../../../dtos/createAllocation.dto'
+import { AllocationDto } from '../../../dtos/allocation.dto'
+import { AllocationsService } from './allocations.service'
 
 @Controller('allocations')
 export class AllocationsController {
@@ -11,7 +11,7 @@ export class AllocationsController {
   async create(
     @Body() allocationDto: CreateAllocationDto,
   ): Promise<AllocationDto> {
-    const allocation = await this.allocationsService.create(allocationDto);
+    const allocation = await this.allocationsService.create(allocationDto)
     return new AllocationDto(
       allocation.id,
       await this.allocationsService.getName(
@@ -24,7 +24,7 @@ export class AllocationsController {
       allocation.end,
       allocationDto.staffMemberId,
       allocationDto.projectId,
-    );
+    )
   }
 
   @Put(':id')
@@ -32,7 +32,7 @@ export class AllocationsController {
     @Param('id') id: number,
     @Body() allocationDto: CreateAllocationDto,
   ): Promise<AllocationDto> {
-    const allocation = await this.allocationsService.edit(id, allocationDto);
+    const allocation = await this.allocationsService.edit(id, allocationDto)
     return new AllocationDto(
       allocation.id,
       await this.allocationsService.getName(
@@ -45,6 +45,6 @@ export class AllocationsController {
       allocation.end,
       allocationDto.staffMemberId,
       allocationDto.projectId,
-    );
+    )
   }
 }

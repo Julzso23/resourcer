@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserPermission } from 'entities/userPermission.entity';
-import { Repository } from 'typeorm';
-import { Permission } from '../../../dtos/permission.enum';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { UserPermission } from 'entities/userPermission.entity'
+import { Repository } from 'typeorm'
+import { Permission } from '../../../dtos/permission.enum'
 
 @Injectable()
 export class PermissionsService {
@@ -19,7 +19,7 @@ export class PermissionsService {
       .createQueryBuilder()
       .where('userId = :userId', { userId })
       .andWhere('permission IN (:permissions)', { permissions })
-      .getOne();
-    return result !== null;
+      .getOne()
+    return result !== null
   }
 }

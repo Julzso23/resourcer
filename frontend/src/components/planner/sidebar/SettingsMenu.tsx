@@ -1,8 +1,11 @@
-import { Sidebar } from "./Sidebar";
+import { Sidebar } from './Sidebar'
 
-export function SettingsMenu({ onClose, closing }: {
-  onClose: () => void,
-  closing: boolean,
+export function SettingsMenu({
+  onClose,
+  closing,
+}: {
+  onClose: () => void
+  closing: boolean
 }) {
   return (
     <Sidebar onClose={onClose} closing={closing}>

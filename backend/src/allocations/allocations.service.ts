@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { Allocation } from 'entities/allocation.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateAllocationDto } from '../../../dtos/createAllocation.dto';
-import { ProjectsService } from 'projects/projects.service';
-import { StaffService } from 'staff/staff.service';
-import { AllocationRemoval } from 'src/entities/allocationRemoval.entity';
+import { Injectable } from '@nestjs/common'
+import { Allocation } from 'entities/allocation.entity'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { CreateAllocationDto } from '../../../dtos/createAllocation.dto'
+import { ProjectsService } from 'projects/projects.service'
+import { StaffService } from 'staff/staff.service'
+import { AllocationRemoval } from 'src/entities/allocationRemoval.entity'
 
 @Injectable()
 export class AllocationsService {
@@ -19,7 +19,7 @@ export class AllocationsService {
   ) {}
 
   async findAll(): Promise<Allocation[]> {
-    return this.allocationsRepository.find();
+    return this.allocationsRepository.find()
   }
 
   async findAllActive(
@@ -48,11 +48,11 @@ export class AllocationsService {
         '((removals.id IS NULL) OR (removalProposal.id != :proposalId))',
         { proposalId },
       )
-      .getMany();
+      .getMany()
   }
 
   async findOne(id: number): Promise<Allocation | null> {
-    return this.allocationsRepository.findOneBy({ id });
+    return this.allocationsRepository.findOneBy({ id })
   }
 
   async create(allocationDto: CreateAllocationDto): Promise<Allocation> {
@@ -62,16 +62,16 @@ export class AllocationsService {
       project: { id: allocationDto.projectId },
       creator: { id: 1 },
       createdIn: { id: allocationDto.createdInId },
-    });
-    return this.allocationsRepository.save(allocation);
+    })
+    return this.allocationsRepository.save(allocation)
   }
 
   async edit(
     allocationId: number,
     allocationDto: CreateAllocationDto,
   ): Promise<Allocation> {
-    await this.remove(allocationId, allocationDto.createdInId);
-    return this.create(allocationDto);
+    await this.remove(allocationId, allocationDto.createdInId)
+    return this.create(allocationDto)
   }
 
   async remove(id: number, proposalId: number): Promise<void> {
@@ -80,7 +80,7 @@ export class AllocationsService {
         allocation: { id },
         proposal: { id: proposalId },
       }),
-    );
+    )
   }
 
   async getName(
@@ -90,7 +90,7 @@ export class AllocationsService {
   ): Promise<string> {
     const collection = await (
       projectView ? this.staffService : this.projectsService
-    ).findOne(projectView ? staffMemberId : projectId);
-    return collection?.name || '';
+    ).findOne(projectView ? staffMemberId : projectId)
+    return collection?.name || ''
   }
 }

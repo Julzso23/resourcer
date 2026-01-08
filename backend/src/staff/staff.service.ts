@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { StaffMember } from 'entities/staffMember.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { searchField } from 'queryHelpers';
+import { Injectable } from '@nestjs/common'
+import { StaffMember } from 'entities/staffMember.entity'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { searchField } from 'queryHelpers'
 
 @Injectable()
 export class StaffService {
@@ -12,7 +12,7 @@ export class StaffService {
   ) {}
 
   async findAll(): Promise<StaffMember[]> {
-    return this.staffRepository.find();
+    return this.staffRepository.find()
   }
 
   async findWithSearch(searchValue?: string): Promise<StaffMember[]> {
@@ -20,14 +20,14 @@ export class StaffService {
       this.staffRepository.createQueryBuilder(),
       'name',
       searchValue,
-    ).getMany();
+    ).getMany()
   }
 
   async findOne(id: number): Promise<StaffMember | null> {
-    return this.staffRepository.findOneBy({ id });
+    return this.staffRepository.findOneBy({ id })
   }
 
   async remove(id: number): Promise<void> {
-    await this.staffRepository.delete(id);
+    await this.staffRepository.delete(id)
   }
 }

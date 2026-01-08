@@ -1,7 +1,7 @@
-import { FastifyRequest } from 'fastify';
+import { FastifyRequest } from 'fastify'
 
 export interface Request extends FastifyRequest {
   user: {
-    id: number;
-  };
+    id: number
+  }
 }

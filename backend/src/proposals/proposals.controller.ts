@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { Proposal } from 'entities/proposal.entity';
-import { ProposalsService } from './proposals.service';
-import { ProposalAllocationsDto } from '../../../dtos/proposalAllocations.dto';
+import { Controller, Get, Param, Query } from '@nestjs/common'
+import { Proposal } from 'entities/proposal.entity'
+import { ProposalsService } from './proposals.service'
+import { ProposalAllocationsDto } from '../../../dtos/proposalAllocations.dto'
 
 @Controller('proposals')
 export class ProposalsController {
@@ -9,7 +9,7 @@ export class ProposalsController {
 
   @Get()
   async getAll(): Promise<Proposal[]> {
-    return this.proposalsService.findAll();
+    return this.proposalsService.findAll()
   }
 
   @Get('master')
@@ -17,11 +17,11 @@ export class ProposalsController {
     @Query('projectView') projectView: boolean,
     @Query('withProposal') withProposal?: number,
   ): Promise<ProposalAllocationsDto> {
-    return this.proposalsService.getMaster(projectView, withProposal);
+    return this.proposalsService.getMaster(projectView, withProposal)
   }
 
   @Get(':id')
   async get(@Param('id') id: number): Promise<Proposal | null> {
-    return this.proposalsService.findOne(id);
+    return this.proposalsService.findOne(id)
   }
 }

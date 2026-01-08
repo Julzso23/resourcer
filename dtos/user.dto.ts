@@ -1,11 +1,11 @@
 export class UserDto {
-  id: number;
-  name: string;
-  email: string;
+  id: number
+  name: string
+  email: string
 
   constructor(id: number, name: string, email: string) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
+    this.id = id
+    this.name = name
+    this.email = email
   }
 }

@@ -1,13 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Proposal } from 'entities/proposal.entity';
-import { ProposalAllocationsDto } from '../../../dtos/proposalAllocations.dto';
-import { Project } from 'entities/project.entity';
-import { AllocationCollectionDto } from '../../../dtos/allocationCollection.dto';
-import { StaffMember } from 'src/entities/staffMember.entity';
-import { AllocationDto } from '../../../dtos/allocation.dto';
-import { AllocationsService } from 'src/allocations/allocations.service';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { Proposal } from 'entities/proposal.entity'
+import { ProposalAllocationsDto } from '../../../dtos/proposalAllocations.dto'
+import { Project } from 'entities/project.entity'
+import { AllocationCollectionDto } from '../../../dtos/allocationCollection.dto'
+import { StaffMember } from 'src/entities/staffMember.entity'
+import { AllocationDto } from '../../../dtos/allocation.dto'
+import { AllocationsService } from 'src/allocations/allocations.service'
 
 @Injectable()
 export class ProposalsService {
@@ -21,15 +21,15 @@ export class ProposalsService {
   ) {}
 
   async findAll(): Promise<Proposal[]> {
-    return this.proposalsRepository.find();
+    return this.proposalsRepository.find()
   }
 
   async findOne(id: number): Promise<Proposal | null> {
-    return this.proposalsRepository.findOneBy({ id });
+    return this.proposalsRepository.findOneBy({ id })
   }
 
   async remove(id: number): Promise<void> {
-    await this.proposalsRepository.delete(id);
+    await this.proposalsRepository.delete(id)
   }
 
   async getMaster(
@@ -38,10 +38,10 @@ export class ProposalsService {
   ): Promise<ProposalAllocationsDto> {
     const projects: Project[] = projectView
       ? await this.projectsRepository.find()
-      : [];
+      : []
     const staff: StaffMember[] = !projectView
       ? await this.staffRepository.find()
-      : [];
+      : []
     return new ProposalAllocationsDto(
       await Promise.all(
         (projectView ? projects : staff).map(
@@ -71,6 +71,6 @@ export class ProposalsService {
             ),
         ),
       ),
-    );
+    )
   }
 }

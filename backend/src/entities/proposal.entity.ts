@@ -1,18 +1,18 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
-import { User } from './user.entity';
-import { BaseEntity } from './base.entity';
+import { Entity, Column, ManyToOne } from 'typeorm'
+import { User } from './user.entity'
+import { BaseEntity } from './base.entity'
 
 @Entity()
 export class Proposal extends BaseEntity {
   @Column()
-  name: string;
+  name: string
 
   @Column({ default: '' })
-  description: string;
+  description: string
 
   @ManyToOne(() => User, { nullable: false })
-  creator: User;
+  creator: User
 
   @Column({ nullable: true })
-  submittedAt?: Date;
+  submittedAt?: Date
 }

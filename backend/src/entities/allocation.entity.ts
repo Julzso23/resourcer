@@ -1,34 +1,34 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
-import { StaffMember } from './staffMember.entity';
-import { User } from './user.entity';
-import { Project } from './project.entity';
-import { Proposal } from './proposal.entity';
-import { AllocationRemoval } from './allocationRemoval.entity';
-import { BaseEntity } from './base.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
+import { StaffMember } from './staffMember.entity'
+import { User } from './user.entity'
+import { Project } from './project.entity'
+import { Proposal } from './proposal.entity'
+import { AllocationRemoval } from './allocationRemoval.entity'
+import { BaseEntity } from './base.entity'
 
 @Entity()
 export class Allocation extends BaseEntity {
   @ManyToOne(() => StaffMember)
-  staffMember?: StaffMember;
+  staffMember?: StaffMember
 
   @ManyToOne(() => Project, { nullable: false })
-  project: Project;
+  project: Project
 
   @Column()
-  percentage: number;
+  percentage: number
 
   @Column()
-  start: Date;
+  start: Date
 
   @Column()
-  end: Date;
+  end: Date
 
   @ManyToOne(() => User, { nullable: false })
-  creator: User;
+  creator: User
 
   @ManyToOne(() => Proposal, { nullable: false })
-  createdIn: Proposal;
+  createdIn: Proposal
 
   @OneToMany(() => AllocationRemoval, (removal) => removal.allocation)
-  removals: AllocationRemoval[];
+  removals: AllocationRemoval[]
 }

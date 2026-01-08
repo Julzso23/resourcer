@@ -1,6 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
-export function StaffMemberCard({ name, link }: { name: string, link?: string }) {
+export function StaffMemberCard({
+  name,
+  link,
+}: {
+  name: string
+  link?: string
+}) {
   return (
     <Link to={link || '#'}>
       <div className="text-white flex flex-row gap-4 items-center bg-gray-950 p-3 rounded-xl">

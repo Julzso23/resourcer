@@ -1,11 +1,11 @@
-import { createModel } from "@rematch/core"
-import { RootModel } from "."
-import { Api } from "../api"
-import { UserDto } from "../../../dtos/user.dto"
+import { createModel } from '@rematch/core'
+import { RootModel } from '.'
+import { Api } from '../api'
+import { UserDto } from '../../../dtos/user.dto'
 
 interface UsersState {
-  users: UserDto[],
-  loggedInUser: UserDto | undefined,
+  users: UserDto[]
+  loggedInUser: UserDto | undefined
 }
 
 export const users = createModel<RootModel>()({
@@ -31,7 +31,13 @@ export const users = createModel<RootModel>()({
 
     async getUsers({ searchValue }, rootState) {
       try {
-        this.setUsers(await Api.get<UserDto[]>('users', { searchValue }, rootState.auth.token || undefined))
+        this.setUsers(
+          await Api.get<UserDto[]>(
+            'users',
+            { searchValue },
+            rootState.auth.token || undefined,
+          ),
+        )
       } catch (error) {
         this.handleError({ error })
       }
@@ -39,7 +45,13 @@ export const users = createModel<RootModel>()({
 
     async getLoggedInUser(_, rootState) {
       try {
-        this.setLoggedInUser(await Api.get<UserDto>('users/me', {}, rootState.auth.token || undefined))
+        this.setLoggedInUser(
+          await Api.get<UserDto>(
+            'users/me',
+            {},
+            rootState.auth.token || undefined,
+          ),
+        )
       } catch (error) {
         if (error === 401) {
           this.setLoggedInUser(undefined)

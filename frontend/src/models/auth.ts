@@ -1,7 +1,7 @@
-import { createModel } from "@rematch/core";
-import { RootModel } from ".";
-import { Api } from "../api";
-import { history } from "../history";
+import { createModel } from '@rematch/core'
+import { RootModel } from '.'
+import { Api } from '../api'
+import { history } from '../history'
 
 interface AuthState {
   token: string | null
@@ -9,7 +9,7 @@ interface AuthState {
 
 export const auth = createModel<RootModel>()({
   state: {
-    token: localStorage.getItem('jwt')
+    token: localStorage.getItem('jwt'),
   } as AuthState,
   reducers: {
     setToken(state: AuthState, token: string): AuthState {
@@ -19,14 +19,16 @@ export const auth = createModel<RootModel>()({
         localStorage.setItem('jwt', token)
       }
       return { ...state, token }
-    }
+    },
   },
   effects: {
     async login(payload: FormData) {
-      const token: string | null = (await Api.post<AuthState>('auth/login', {
-        email: payload.get('email')!.toString(),
-        password: payload.get('password')!.toString(),
-      })).token
+      const token: string | null = (
+        await Api.post<AuthState>('auth/login', {
+          email: payload.get('email')!.toString(),
+          password: payload.get('password')!.toString(),
+        })
+      ).token
       if (token) {
         this.setToken(token)
       }
@@ -38,14 +40,16 @@ export const auth = createModel<RootModel>()({
     },
 
     async register(payload: FormData) {
-      const token: string | null = (await Api.post<AuthState>('auth/register', {
+      const token: string | null = (
+        await Api.post<AuthState>('auth/register', {
           name: payload.get('name')!.toString(),
           email: payload.get('email')!.toString(),
           password: payload.get('password')!.toString(),
-        })).token
+        })
+      ).token
       if (token) {
         this.setToken(token)
       }
-    }
-  }
+    },
+  },
 })

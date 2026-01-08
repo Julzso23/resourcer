@@ -1,5 +1,5 @@
-import { NavbarUser } from "./NavbarUser";
-import { NavItem } from "./NavItem";
+import { NavbarUser } from './NavbarUser'
+import { NavItem } from './NavItem'
 
 export function Navbar() {
   return (

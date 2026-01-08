@@ -1,9 +1,9 @@
-import { AllocationCollectionDto } from "./allocationCollection.dto";
+import { AllocationCollectionDto } from './allocationCollection.dto'
 
 export class ProposalAllocationsDto {
-  collections: AllocationCollectionDto[];
+  collections: AllocationCollectionDto[]
 
   constructor(collections: AllocationCollectionDto[]) {
-    this.collections = collections;
+    this.collections = collections
   }
 }

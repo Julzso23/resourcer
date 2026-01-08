@@ -1,7 +1,13 @@
-import { Controller, Get, NotFoundException, Param, Query } from '@nestjs/common';
-import { StaffService } from './staff.service';
-import { StaffMemberDto } from '../../../dtos/staffMember.dto';
-import { StaffMember } from 'entities/staffMember.entity';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Query,
+} from '@nestjs/common'
+import { StaffService } from './staff.service'
+import { StaffMemberDto } from '../../../dtos/staffMember.dto'
+import { StaffMember } from 'entities/staffMember.entity'
 
 @Controller('staff')
 export class StaffController {
@@ -9,9 +15,9 @@ export class StaffController {
 
   @Get(':id')
   async get(@Param('id') id: number): Promise<StaffMemberDto> {
-    const staffMember: StaffMember | null = await this.staffService.findOne(id);
-    if (staffMember == null) throw new NotFoundException();
-    return new StaffMemberDto(staffMember.id, staffMember.name);
+    const staffMember: StaffMember | null = await this.staffService.findOne(id)
+    if (staffMember == null) throw new NotFoundException()
+    return new StaffMemberDto(staffMember.id, staffMember.name)
   }
 
   @Get()
@@ -20,6 +26,6 @@ export class StaffController {
   ): Promise<StaffMemberDto[]> {
     return (await this.staffService.findWithSearch(searchValue)).map(
       (staffMember) => new StaffMemberDto(staffMember.id, staffMember.name),
-    );
+    )
   }
 }

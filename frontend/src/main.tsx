@@ -1,6 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Route, Routes, unstable_HistoryRouter as HistoryRouter } from 'react-router-dom'
+import {
+  Route,
+  Routes,
+  unstable_HistoryRouter as HistoryRouter,
+} from 'react-router-dom'
 import { App } from './App'
 import './index.css'
 import { LoginPage } from './pages/LoginPage'
@@ -18,7 +22,7 @@ import { StaffMemberPage } from './pages/StaffMemberPage'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider store={ store }>
+    <Provider store={store}>
       <HistoryRouter history={history}>
         <Navbar />
         <Routes>

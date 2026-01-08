@@ -1,3 +1,3 @@
-import { UNSAFE_createBrowserHistory } from "react-router-dom"
+import { UNSAFE_createBrowserHistory } from 'react-router-dom'
 
 export const history = UNSAFE_createBrowserHistory({ window, v5Compat: true })
