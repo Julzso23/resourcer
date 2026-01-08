@@ -14,7 +14,13 @@ export const staff = createModel<RootModel>()({
   reducers: {
     setStaffMembers(state, staffMembers: StaffMemberDto[]) {
       return { ...state, staffMembers }
-    }
+    },
+    removeStaffMember(state, staffMemberId: number) {
+      return { ...state, projects: state.staffMembers.filter(staffMember => staffMember.id !== staffMemberId) }
+    },
+    addStaffMember(state, staffMember: StaffMemberDto) {
+      return { ...state, staffMembers: [...state.staffMembers, staffMember] }
+    },
   },
   effects: (dispatch) => ({
     handleError({ error }) {
@@ -26,6 +32,15 @@ export const staff = createModel<RootModel>()({
     async getStaffMembers({ searchValue }, rootState) {
       try {
         this.setStaffMembers(await Api.get<StaffMemberDto[]>('staff', { searchValue }, rootState.auth.token || undefined))
+      } catch (error) {
+        this.handleError({ error })
+      }
+    },
+
+    async getStaffMember({ staffMemberId }, rootState) {
+      try {
+        this.removeStaffMember(staffMemberId)
+        this.addStaffMember(await Api.get<StaffMemberDto>(`staff/${staffMemberId}`, {}, rootState.auth.token || undefined))
       } catch (error) {
         this.handleError({ error })
       }

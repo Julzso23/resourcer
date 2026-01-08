@@ -14,6 +14,7 @@ import { history } from './history'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { UsersPage } from './pages/UsersPage'
 import { ProjectPage } from './pages/ProjectPage'
+import { StaffMemberPage } from './pages/StaffMemberPage'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="planner" element={<PlannerPage />} />
+          <Route path="staff/:id" element={<StaffMemberPage />} />
           <Route path="staff" element={<StaffPage />} />
           <Route path="projects/:id" element={<ProjectPage />} />
           <Route path="projects" element={<ProjectsPage />} />

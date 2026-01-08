@@ -26,7 +26,7 @@ export function StaffPage() {
       <TextInput type="text" placeholder="Search" value={_searchValue} onChange={e => setSearchValue(e.target.value)} />
       { loading ? (<Loading />) :
       (<div className="grid xl:grid-cols-8 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-2">
-        { staffMembers.map(staffMember => <StaffMemberCard key={staffMember.id} name={staffMember.name} />) }
+        { staffMembers.map(staffMember => <StaffMemberCard key={staffMember.id} name={staffMember.name} link={`/staff/${staffMember.id}`} />) }
       </div>) }
     </div>
   )
