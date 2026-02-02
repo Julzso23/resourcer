@@ -5,6 +5,7 @@ import { AllocationResizeHandle } from './AllocationResizeHandle'
 import { useDispatch, useSelector } from 'react-redux'
 import { Dispatch, RootState } from '../../../store'
 import { CreateAllocationDto } from '../../../../../dtos/createAllocation.dto'
+import { pointerToDateTime } from '../plannerHelpers'
 
 enum AllocationState {
   Idle,
@@ -16,9 +17,11 @@ enum AllocationState {
 export function Allocation({
   allocation,
   interval,
+  ghosted,
 }: {
   allocation: AllocationModel
   interval: Interval
+  ghosted?: boolean
 }) {
   const ref: Ref<HTMLDivElement> = useRef(null)
 
@@ -92,33 +95,26 @@ export function Allocation({
     (event: React.PointerEvent) => {
       if (loading) return
 
-      const rowX: number = ref.current!.parentElement!.getBoundingClientRect().x
-      const rowWidth: number =
-        ref.current!.parentElement!.getBoundingClientRect().width
+      const rowBoundingBox: DOMRect =
+        ref.current!.parentElement!.getBoundingClientRect()
       switch (dragState) {
         case AllocationState.Move: {
-          const start: DateTime = interval
-            .start!.plus({
-              days:
-                (interval.length('days') / rowWidth) *
-                (event.clientX - rowX - leftOffset),
-            })
-            .plus({ days: 0.5 })
-            .startOf('day')
+          const start: DateTime = pointerToDateTime(
+            interval,
+            rowBoundingBox,
+            event.clientX - leftOffset,
+          )
           setIntervalOverride(
             Interval.after(start, allocation.interval.toDuration()),
           )
           break
         }
         case AllocationState.ResizeLeft: {
-          const start: DateTime = interval
-            .start!.plus({
-              days:
-                (interval.length('days') / rowWidth) *
-                (event.clientX - rowX - leftOffset),
-            })
-            .plus({ days: 0.5 })
-            .startOf('day')
+          const start: DateTime = pointerToDateTime(
+            interval,
+            rowBoundingBox,
+            event.clientX - leftOffset,
+          )
           if (allocation.interval.end!.diff(start).as('days') >= 1) {
             setIntervalOverride(
               Interval.fromDateTimes(start, allocation.interval.end!),
@@ -127,14 +123,11 @@ export function Allocation({
           break
         }
         case AllocationState.ResizeRight: {
-          const end: DateTime = interval
-            .start!.plus({
-              days:
-                (interval.length('days') / rowWidth) *
-                (event.clientX - rowX - rightOffset),
-            })
-            .plus({ days: 0.5 })
-            .startOf('day')
+          const end: DateTime = pointerToDateTime(
+            interval,
+            rowBoundingBox,
+            event.clientX - rightOffset,
+          )
           if (end.diff(allocation.interval.start!).as('days') >= 1) {
             setIntervalOverride(
               Interval.fromDateTimes(allocation.interval.start!, end),
@@ -206,7 +199,8 @@ export function Allocation({
       className={`absolute border top-1/8 h-3/4 bg-green-950 border-emerald-950 shadow box-border select-none flex
         flex-row cursor-move group touch-none
         ${dragState !== AllocationState.Idle ? 'shadow-black' : ''} ${borderRadiusClasses}
-        ${loading ? 'animate-pulse' : ''}`}
+        ${loading ? 'animate-pulse' : ''}
+        ${ghosted ? 'pointer-events-none opacity-80' : ''}`}
       style={{
         left: allocationLeft(intervalOverride || allocation.interval),
         width: allocationWidth(intervalOverride || allocation.interval),
